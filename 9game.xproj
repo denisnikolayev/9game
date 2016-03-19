@@ -19,5 +19,8 @@
     <DnxInvisibleFolder Include=".git\" />
     <DnxInvisibleFolder Include=".vs\" />
   </ItemGroup>
+  <ItemGroup>
+    <DnxInvisibleContent Include="tests.js" />
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>

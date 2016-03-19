@@ -39,8 +39,8 @@ export class ImagePositionFinder {
             var line: { x: number, y: number }[] = [];
 
             for (let i = 1; i <= 13; i++) {
-                let y = numberInBackground / numberOfCardInLine;
-                let x = numberOfCardInLine - y * numberOfCardInLine; // invert by horz.
+                let y = Math.floor(numberInBackground / numberOfCardInLine);
+                let x = numberOfCardInLine - (numberInBackground - y * numberOfCardInLine) - 1; // invert by horz and move to zero
                 line[i] = { x: x, y: y };
                 numberInBackground += 1;
             }
@@ -52,7 +52,7 @@ export class ImagePositionFinder {
     }
 
 
-    static gererateSetOfCards(): Card[][] {
+    static generateSetOfCards(): Card[][] {
         let full = [];
         for (let suit of suits) {
 
@@ -71,6 +71,6 @@ export class ImagePositionFinder {
 
 
 
-export let setOfCards: Card[][] = ImagePositionFinder.gererateSetOfCards();
+export let setOfCards: Card[][] = ImagePositionFinder.generateSetOfCards();
 
 
