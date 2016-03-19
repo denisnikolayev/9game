@@ -21,8 +21,8 @@ export class ImagePositionFinderTests extends tsUnit.TestClass {
 
     generateSetOfCardsShouldReturnCorrectResult() {
         var result = cardUnit.ImagePositionFinder.generateSetOfCards();
-        console.log(result);
-
+        this.areIdentical(4, result.length);
+        this.areIdentical(15, result[0].length);
     }
 }
 

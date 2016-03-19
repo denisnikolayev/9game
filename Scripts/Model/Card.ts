@@ -8,15 +8,12 @@ export const suitDiamonds = 3;
 export class Card {
     index: number;
     suit: number;
-    background: {
-        top: number;
-        left:number;
-    }
+    backgroundPosition:string;
 
-    constructor(index, suit, background) {
+    constructor(index, suit, backgroundPosition) {
         this.index = index;
         this.suit = suit;
-        this.background = background;
+        this.backgroundPosition = backgroundPosition;
     }
 }
 
@@ -24,8 +21,8 @@ export class Card {
 export const indexes = [6, 7, 8, 9, 10, 11, 12, 13, 14];
 export const suits = [suitSpades, suitHeats, suitClubs, suitDiamonds];
 
-export const size = { width: 110, height: 152};
-
+export const size = { width: 109, height: 150};
+export const spaceBetweenCards = { width: 2, height: 4 };
 
 
 export class ImagePositionFinder {
@@ -54,11 +51,17 @@ export class ImagePositionFinder {
 
     static generateSetOfCards(): Card[][] {
         let full = [];
+        var lines = ImagePositionFinder.inLine();
+
         for (let suit of suits) {
 
             let row: Card[] = [];
             for (let index of indexes) {
-                row[index] = new Card(index, suit, { top: 1, left: 1 });
+                var card = lines[suit][index==14?1:index];
+                var left = 2 + (size.width + spaceBetweenCards.width) * card.x;
+                var top = 2 + (size.height + spaceBetweenCards.height) * card.y;
+
+                row[index] = new Card(index, suit, `-${left}px -${top}px`);
             }
 
             full[suit] = row;
