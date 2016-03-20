@@ -20,12 +20,12 @@ body, html {
 
 .card {
     @extend .baseCard;
-    background: url('../wwwroot/images/cards.jpg')  no-repeat;   
+    background: url('../images/cards.jpg')  no-repeat;   
 }
 
 .back {
     @extend .baseCard;
-    background:url('../wwwroot/images/back.png') center no-repeat;
+    background:url('../images/back.png') center no-repeat;
 }
 
 $cardSmallWidth : 55px;
@@ -37,35 +37,35 @@ $cardSmallWidth : 55px;
     display: inline-block; 
     border: 1px solid black;
     border-radius: 4px;
-    background:url('../wwwroot/images/back_small.png') center no-repeat;
+    background:url('../images/back_small.png') center no-repeat;
 }
 
 
 
-.table{
+.table {
     .money {
-        font-size:15pt;
-        color:gold;
-        font-weight:bold;
-        text-align:center;
+        font-size: 15pt;
+        color: gold;
+        font-weight: bold;
+        text-align: center;
 
         .coin {
-            padding-right:20px;
-            background:url('../wwwroot/images/coins.png') right no-repeat;
+            padding-right: 20px;
+            background: url('../images/coins.png') right no-repeat;
         }
-    }   
-       
+    }
+
     .bank {
         @extend .money;
     }
 
     .left_gamer {
-        margin-left:20px;
-        width:$cardSmallWidth * 4 + 4 * 4+10;
-        float:left;
+        margin-left: 20px;
+        width: $cardSmallWidth * 4 + 4 * 4+10;
+        float: left;
 
         h2 {
-            text-align:center;
+            text-align: center;
         }
     }
 
@@ -73,25 +73,28 @@ $cardSmallWidth : 55px;
         margin-left: auto;
         margin-right: auto;
         width: 9 * $cardWidht + 4 * 9 + 20;
-        border:1px solid black;
-        padding:5px;
+        padding: 5px;
+        -moz-border-image: url(../images/chalk_border.png) 20 20 20 20 repeat repeat;
+        -o-border-image: url(../images/chalk_border.png) 20 20 20 20 repeat repeat;
+        -webkit-border-image: url(../images/chalk_border.png) 20 20 20 20 repeat repeat;
+        border-image: url(../images/chalk_border.png) 20 20 20 20 repeat repeat;        
+        border-width: 20px;
     }
 
     .right_gamer {
-        margin-right:20px;
-        width:$cardSmallWidth * 4 + 4 * 4+10;
-        float:right;
+        margin-right: 20px;
+        width: $cardSmallWidth * 4 + 4 * 4+10;
+        float: right;
+
         h2 {
-            text-align:center;
+            text-align: center;
         }
     }
 
     .current_gamer {
-        margin-top:30px;
-        width:$cardWidht * 13;
+        margin-top: 30px;
+        width: $cardWidht * 13;
         margin-left: auto;
         margin-right: auto;
     }
-
-    
 }
