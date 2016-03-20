@@ -2,7 +2,7 @@
 var path = require("path");
 
 module.exports = {
-    devtool: "",
+    devtool: "inline-source-map",
     entry: [
          "webpack-dev-server/client?http://localhost:3002",
          "webpack/hot/only-dev-server",

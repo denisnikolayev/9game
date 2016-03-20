@@ -1,6 +1,17 @@
-﻿.baseCard {
-    width:109px;
-    height:150px;  
+﻿$cardWidht : 109px;
+$cardHeight : 150px;
+
+body, html {
+    background-color:#008080;
+    width:100%;
+    min-height:100%;
+    margin:0;
+    padding:0;
+}
+
+.baseCard {
+    width:$cardWidht;
+    height:$cardHeight;  
     margin:2px;
     display: inline-block; 
     border: 1px solid black;
@@ -17,3 +28,70 @@
     background:url('../wwwroot/images/back.png') center no-repeat;
 }
 
+$cardSmallWidth : 55px;
+
+.small_back {
+    width:$cardSmallWidth;
+    height:75px;  
+    margin:2px;
+    display: inline-block; 
+    border: 1px solid black;
+    border-radius: 4px;
+    background:url('../wwwroot/images/back_small.png') center no-repeat;
+}
+
+
+
+.table{
+    .money {
+        font-size:15pt;
+        color:gold;
+        font-weight:bold;
+        text-align:center;
+
+        .coin {
+            padding-right:20px;
+            background:url('../wwwroot/images/coins.png') right no-repeat;
+        }
+    }   
+       
+    .bank {
+        @extend .money;
+    }
+
+    .left_gamer {
+        margin-left:20px;
+        width:$cardSmallWidth * 4 + 4 * 4+10;
+        float:left;
+
+        h2 {
+            text-align:center;
+        }
+    }
+
+    .main {
+        margin-left: auto;
+        margin-right: auto;
+        width: 9 * $cardWidht + 4 * 9 + 20;
+        border:1px solid black;
+        padding:5px;
+    }
+
+    .right_gamer {
+        margin-right:20px;
+        width:$cardSmallWidth * 4 + 4 * 4+10;
+        float:right;
+        h2 {
+            text-align:center;
+        }
+    }
+
+    .current_gamer {
+        margin-top:30px;
+        width:$cardWidht * 13;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    
+}
