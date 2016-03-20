@@ -6,7 +6,8 @@ module.exports = {
     entry: [
          "webpack-dev-server/client?http://localhost:3002",
          "webpack/hot/only-dev-server",
-        "./scripts/app.tsx"
+         "./sass/app.scss",
+         "./scripts/app.tsx"
     ],
     output: {
         path: path.join(__dirname, "wwwroot"),
@@ -14,13 +15,20 @@ module.exports = {
         publicPath: "/"
     },
     resolve: {
-        extensions: [".tsx", ".js", "", ".ts"]
+        extensions: [".tsx", ".js", "", ".ts", '.scss', '.png', '.jpg']
     },
     module: {
         loaders: [{
             test: /\.tsx?$/,
             loaders: ["react-hot", "ts-loader"],
             include: path.join(__dirname, "scripts")
+        },
+        { test: /\.png|\.jpg$/, loader: "url-loader?limit=100000" },
+        {
+            test: /\.scss$/,
+            exclude: /node_modules|lib/,
+            loader: 'style!css!sass',
+            include: path.join(__dirname, './sass')
         }]
     },
     debug: false,

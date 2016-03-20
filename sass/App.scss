@@ -1,0 +1,19 @@
+﻿.baseCard {
+    width:109px;
+    height:150px;  
+    margin:2px;
+    display: inline-block; 
+    border: 1px solid black;
+    border-radius: 4px;
+}
+
+.card {
+    @extend .baseCard;
+    background: url('../wwwroot/images/cards.jpg')  no-repeat;   
+}
+
+.back {
+    @extend .baseCard;
+    background:url('../wwwroot/images/back.png') center no-repeat;
+}
+
