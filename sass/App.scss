@@ -2,14 +2,14 @@
 $cardHeight : 150px;
 
 body, html {
-    background-color:#008080;
+    background-color:#008080;    
     width:100%;
     min-height:100%;
     margin:0;
     padding:0;
 }
 
-.baseCard {
+.emptyCard {
     width:$cardWidht;
     height:$cardHeight;  
     margin:2px;
@@ -19,22 +19,28 @@ body, html {
 }
 
 .card {
-    @extend .baseCard;
+    @extend .emptyCard;
     background: url('../images/cards.jpg')  no-repeat;   
 }
 
 .back {
-    @extend .baseCard;
+    @extend .emptyCard;
     background:url('../images/back.png') center no-repeat;
 }
 
 $cardSmallWidth : 55px;
 
-.small_back {
+.empty_back {
     width:$cardSmallWidth;
     height:75px;  
     margin:2px;
     display: inline-block; 
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.small_back {
+    @extend .empty_back;
     border: 1px solid black;
     border-radius: 4px;
     background:url('../images/back_small.png') center no-repeat;
@@ -96,5 +102,6 @@ $cardSmallWidth : 55px;
         width: $cardWidht * 13;
         margin-left: auto;
         margin-right: auto;
+        text-align:center;
     }
 }

@@ -10,4 +10,8 @@ export class Card {
         this.index = index;
         this.suit = suit;
     }
+
+    toString(): string {
+        return `${this.suit} x ${this.index}`;
+    }
 }

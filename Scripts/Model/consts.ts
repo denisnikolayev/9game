@@ -4,6 +4,8 @@ export const suitHeats = 1;
 export const suitClubs = 2;
 export const suitDiamonds = 3;
 
+export const lengthOfLine = 15;
+export const maxNumberOfCard = 12;
 
 export const indexes = [6, 7, 8, 9, 10, 11, 12, 13, 14];
 export const suits = [suitSpades, suitHeats, suitClubs, suitDiamonds];
