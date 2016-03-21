@@ -39,6 +39,7 @@ export class GameTests extends tsUnit.TestClass {
 
         this.areIdentical(baseAmounOfMoney - lostMoney, this.game.leftOpponent.money);
         this.areIdentical(baseAmounOfMoney + lostMoney, this.game.bankMoney);
+        this.areIdentical(baseAmounOfMoney, this.game.rightOpponent.money);
     }
 
     playerTurnShouldCorrectChangeAvaliableCards() {
