@@ -1,56 +1,14 @@
 ﻿import {Card} from "./card";
-import {suits, indexes, lengthOfLine, maxNumberOfCard} from "./consts";
-import {getRandomItem} from "../utils/helpers";
+import {suits, indexes, lengthOfLine} from "./consts";
+import {Opponent} from "./opponent";
+import {Player} from "./player";
+import {IPlayer} from "./iplayer";
  
 
-enum WhoPlayer {
+export enum WhoPlayer {
     current,
     left,
     right
-}
-
-interface IPlayer {
-    removeCard(card: Card): void;
-    money:number;
-}
-
-export class Opponent implements IPlayer{
-    money: number;
-    name: string;
-    cardsWerePut: boolean[]; 
-
-    constructor(name: string, money: number) {
-        this.name = name;
-        this.money = money;
-        this.cardsWerePut = [...new Array(maxNumberOfCard).keys()].map(i=> false);
-    }
-
-    removeCard(card: Card) {
-        var indexes = this.cardsWerePut.map((card, index) => { return { card: card, index: index }; }).filter(item => item.card == false);
-        var rnd = getRandomItem(indexes);
-        this.cardsWerePut[rnd.index] = true;
-    }
-}
-
-export class Player implements IPlayer{
-    money: number;
-    cards: Card[];
-    isMyTurn: boolean = false;
-    
-    constructor(money: number, cards: Card[]) {
-        this.money = money;
-        this.cards = cards;
-    }
-
-    removeCard(card:Card) {
-        var find = this.cards.filter(item => item.index == card.index && item.suit == card.suit);
-        if (find.length == 1) {
-            var index = this.cards.indexOf(find[0]);
-            this.cards.splice(index, 1);
-        } else {
-            throw `Cann't find card ${card.toString()} to current player`;
-        }
-    }
 }
 
 export class Game {
@@ -92,7 +50,8 @@ export class Game {
         this.bankMoney += lostMoney;
     }
 
-    playerTurn() {
+    playerTurn(availibleCards:Card[]) {
         this.player.isMyTurn = true;
+        this.player.setAvailibleCard(availibleCards);
     }
 }
