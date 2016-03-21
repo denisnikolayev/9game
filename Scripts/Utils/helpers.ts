@@ -10,3 +10,12 @@ export function getRandomItem<T>(array: T[]): T {
     if (array.length == 0) throw 'Array length must be more then zero.';
     return array[getRandom(0, array.length - 1)];
 }
+
+
+export function range<T>(length: number, defaultValue:T): T[] {
+    var result = new Array<T>(length);
+    for (var i = 0; i < length; i++) {
+        result[i] = defaultValue;
+    }
+    return result;
+}

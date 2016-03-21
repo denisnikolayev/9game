@@ -3,10 +3,11 @@
 export const cardsBackgroundsCache = ImagePositionFinder.generateBackgroundPositions();
 
 export class Card {
-    index: number;
     suit: number;
+    index: number;
+    
 
-    constructor(index, suit) {
+    constructor(suit:number, index:number) {
         this.index = index;
         this.suit = suit;
     }

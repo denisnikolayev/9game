@@ -1,4 +1,4 @@
-﻿import {getRandomItem} from "../utils/helpers";
+﻿import {getRandomItem, range} from "../utils/helpers";
 import {maxNumberOfCard} from "./consts";
 import {Card} from "./card";
 import {IPlayer} from "./iplayer";
@@ -11,7 +11,7 @@ export class Opponent implements IPlayer {
     constructor(name: string, money: number) {
         this.name = name;
         this.money = money;
-        this.cardsWerePut = [...new Array(maxNumberOfCard).keys()].map(i=> false);
+        this.cardsWerePut = range(maxNumberOfCard, false);
     }
 
     removeCard(card: Card) {

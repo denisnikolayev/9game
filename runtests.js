@@ -3,7 +3,7 @@ var path = require("path");
 
 var config = {
     entry: [         
-        "./scripts/app_test.ts"
+        "./scripts/tests.ts"
     ],
     output: {
         path: __dirname,

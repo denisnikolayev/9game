@@ -45,13 +45,15 @@ export class TablePage extends React.Component<{ game: Game, onPlayerCardClick:(
                 
                 <div className="current_gamer">
                     <div className="money"><span className="coin">{game.player.money}</span></div>
-                    {game.player.cards.map(c=> <div
-                        key={`${c.suit} x ${c.index}`}
-                        className={"card " + (game.player.isCardCanBePut(c)?"can":"")}
-                        style={{ backgroundPosition: cardsBackgroundsCache[c.suit][c.index] }}
-                        onClick={this.onPlayerCardClick.bind(this, c) }
-                        />                        
-                        )}
+                    {game.player.cards.map(c=> {
+                        var canPut = game.player.isCardCanBePut(c);
+                        return <div
+                            key={`${c.suit} x ${c.index}`}
+                            className={"card " + (canPut ? "can" : "") }
+                            style={{ backgroundPosition: cardsBackgroundsCache[c.suit][c.index] }}
+                            onClick={canPut?this.onPlayerCardClick.bind(this, c):null }
+                            />
+                    })}
                 </div>                    
             </div>
         );

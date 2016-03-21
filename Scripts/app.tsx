@@ -11,7 +11,7 @@ export class App extends React.Component<{}, { game: Game }> {
     constructor() {
         super();
 
-        var c = (suit, index) => new Card(index, suit);
+        var c = (suit, index) => new Card(suit, index);
 
         var game = new Game(
             new Opponent("Pupusica", 250),

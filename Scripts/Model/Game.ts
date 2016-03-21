@@ -3,7 +3,7 @@ import {suits, indexes, lengthOfLine} from "./consts";
 import {Opponent} from "./opponent";
 import {Player} from "./player";
 import {IPlayer} from "./iplayer";
- 
+import {range} from "../utils/helpers";
 
 export enum WhoPlayer {
     current,
@@ -20,7 +20,7 @@ export class Game {
 
 
     constructor(leftOpponent: Opponent, rightOpponent: Opponent, player : Player, bankMoney : number) {
-        this.cardsWereOpened = suits.map(i => [...new Array(lengthOfLine).keys()].map(i => false));
+        this.cardsWereOpened = suits.map(i => range(lengthOfLine, false));
         this.leftOpponent = leftOpponent;
         this.rightOpponent = rightOpponent;
         this.player = player;
