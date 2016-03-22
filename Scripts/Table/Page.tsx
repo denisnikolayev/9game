@@ -41,10 +41,11 @@ export class TablePage extends React.Component<{ game: Game, onPlayerCardClick:(
                 
                 <div className="main">
                     {list}
-                </div>    
-                
+                </div>  
+                  
+                <div className="money"><span className="coin">{game.player.money}</span></div>
                 <div className="current_gamer">
-                    <div className="money"><span className="coin">{game.player.money}</span></div>
+                   
                     {game.player.cards.map(c=> {
                         var canPut = game.player.isCardCanBePut(c);
                         return <div
