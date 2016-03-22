@@ -17,7 +17,7 @@ export class Game {
     rightOpponent: Opponent;
     player: Player;
     bankMoney: number;
-
+    
 
     constructor(leftOpponent: Opponent, rightOpponent: Opponent, player : Player, bankMoney : number) {
         this.cardsWereOpened = suits.map(i => range(lengthOfLine, false));
@@ -25,6 +25,14 @@ export class Game {
         this.rightOpponent = rightOpponent;
         this.player = player;
         this.bankMoney = bankMoney;
+    }
+
+    getPlayerByName(name: string):WhoPlayer {
+        if (this.player.name == name) return WhoPlayer.current;
+        if (this.leftOpponent.name == name) return WhoPlayer.left;
+        if (this.rightOpponent.name == name) return WhoPlayer.right;
+
+        throw `Player name ${name} is unexpected`;
     }
 
     getPlayer(who: WhoPlayer): IPlayer {

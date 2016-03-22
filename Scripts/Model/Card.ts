@@ -12,7 +12,7 @@ export class Card {
         this.suit = suit;
     }
 
-    toString(): string {
-        return `${this.suit} x ${this.index}`;
+    static toString(card:Card): string {
+        return `${card.suit} x ${card.index}`;
     }
 }

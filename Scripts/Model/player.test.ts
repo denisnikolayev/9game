@@ -8,7 +8,7 @@ const card2 = new Card(suitHeats, 7);
 
 export class PlayerTests extends tsUnit.TestClass {
     
-    player = new Player(0, [card1, card2]);
+    player = new Player("", 0, [card1, card2]);
 
     playerRemoveCardShouldRemoveCorrectCard() {
        

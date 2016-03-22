@@ -9,7 +9,7 @@ const baseAmounOfMoney = 50;
 
 export class GameTests extends tsUnit.TestClass {
 
-    player = new Player(0, [new Card(suitHeats, 7), new Card(suitHeats, 8)]);
+    player = new Player("", 0, [new Card(suitHeats, 7), new Card(suitHeats, 8)]);
     opponentLeft = new Opponent("", baseAmounOfMoney);
     opponentRight = new Opponent("", baseAmounOfMoney);
     game = new Game(this.opponentLeft, this.opponentRight, this.player, baseAmounOfMoney);
