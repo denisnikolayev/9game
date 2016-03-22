@@ -3,9 +3,17 @@ import {render} from "react-dom";
 import {TablePage} from "./table/page";
 import {Game, WhoPlayer} from "./model/game";
 import {Card} from "./model/card";
-import {suitDiamonds, suitClubs}from "./model/consts";
+import {suitDiamonds, suitClubs} from "./model/consts";
 import {Opponent} from "./model/opponent";
 import {Player} from "./model/player";
+import * as $ from 'jquery';
+
+// for signalR
+(window as any).jQuery = $; 
+
+import 'ms-signalr-client';
+
+
 
 export class App extends React.Component<{}, { game: Game }> {
     constructor() {
@@ -25,6 +33,20 @@ export class App extends React.Component<{}, { game: Game }> {
         this.state = {
             game: game
         };
+
+        var connection = $.hubConnection("http://localhost:30155/messaging");
+        var proxy = connection.createHubProxy("Messaging");
+
+        proxy.on('LogOnClient', function (message: string) {
+            console.log(message);
+        });
+
+        connection.start()
+            .done(function () {
+                console.log('Now connected, connection ID=' + connection.id);
+                proxy.invoke("log", "test app");
+            })
+            .fail(function () { console.log('Could not connect'); });
     }
 
     onPlayerCardClick(card: Card) {   

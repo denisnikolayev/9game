@@ -1,5 +1,6 @@
 ﻿// ReSharper disable once PossiblyUnassignedProperty
 var path = require("path");
+var webpack = require("webpack");
 
 module.exports = {
     devtool: "inline-source-map",
@@ -31,6 +32,13 @@ module.exports = {
             include: path.join(__dirname, './sass')
         }]
     },
+    plugins:[
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery",
+            "window.jQuery": "jquery"
+        })
+    ],
     debug: false,
     devServer: {
         contentBase: "./wwwroot",

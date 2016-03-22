@@ -24,6 +24,13 @@ namespace Game
         {
             // Add framework services.
             services.AddMvc();
+            services.AddSignalR(options =>
+            {
+                options.Hubs.EnableDetailedErrors = true;
+                options.Hubs.EnableJavaScriptProxies = false;
+            });
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -32,9 +39,13 @@ namespace Game
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseIISPlatformHandler();
+            app.UseCors(builder => builder.WithOrigins("http://localhost:3002").AllowAnyHeader().AllowAnyMethod().AllowCredentials());
 
+            app.UseIISPlatformHandler();
+            
             app.UseStaticFiles();
+            app.UseWebSockets();
+            app.UseSignalR("/messaging");
 
             app.UseMvc();
         }
