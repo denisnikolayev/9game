@@ -2,7 +2,7 @@
 import * as Helpers from "./helpers";
 
 export class HelpersTests extends tsUnit.TestClass {
-    getRandomShouldNotGoOutFromRange() {
+    getRandomShouldNotGetOutFromRange() {
         const min = 5;
         const max = 8;
 
