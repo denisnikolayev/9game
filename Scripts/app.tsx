@@ -8,6 +8,8 @@ import {GameResultPage} from "./pages/gameResultPage";
 import {Container} from "./model/container";
 import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 
+
+
 export class Layout extends React.Component<{children:any}, {}> {      
     render() {
         return <div>{this.props.children}</div>
@@ -21,7 +23,7 @@ export class Layout extends React.Component<{children:any}, {}> {
     render(<div>Loading</div>, appNode);
 
     try {
-        await Container.Start();
+        await Container.ConnectSignalR();
         await Container.lobbyContext.registerUser();
 
         render(
@@ -35,8 +37,7 @@ export class Layout extends React.Component<{children:any}, {}> {
             </Router>
             , appNode);
 
-    } catch (e) {
-        console.log(e);
+    } catch (e) {        
         render(<div>Could not connect to server: <br/>{e.toString()}</div>, appNode);
     }
 })();

@@ -34,7 +34,10 @@ module.exports = {
             include: path.join(__dirname, './sass')
         }]
     },
-    plugins:[
+    plugins: [        
+        new webpack.DefinePlugin({
+            SERVER_URL: process.env.NODE_ENV == "development" ? JSON.stringify("http://localhost:30155") : JSON.stringify("/")
+        }),
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery",

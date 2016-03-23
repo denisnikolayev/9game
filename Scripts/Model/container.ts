@@ -2,33 +2,27 @@
 import {LobbyContext} from "./lobbyContext";
 import {GameResult} from "./gameResult";
 import {browserHistory} from 'react-router'
-import {PlayerInfo} from "./players/playerInfo";
-import {Player} from "./players/player";
 
 import * as $ from 'jquery';
 import 'ms-signalr-client';
+
 
 export class Container {
     static gameContext: GameContext;
     static lobbyContext: LobbyContext;
     static connection: SignalR.Hub.Connection;
 
-    static Start():Promise<void> {
+    static ConnectSignalR():Promise<void> {
         return new Promise<void>((r, e) => Container.connection.start().then(r).fail(e));
     }
 }
 
 // imitation initializing IoC container
-
-Container.connection = $.hubConnection("http://localhost:30155");
+Container.connection = $.hubConnection(SERVER_URL);
 
 
 Container.gameContext = new GameContext(Container.connection.createHubProxy("Game"));
-Container.gameContext.onFinish = (gameResult) => {
-    
-    //Container.gameResult = gameResult;
-    //this.setState({ gameResult: gameResult, page: "gameResult" });
-}
+Container.gameContext.onFinish = (gameResult) => browserHistory.push({pathname: "/result", state:gameResult});
 
 
 Container.lobbyContext = new LobbyContext(Container.connection.createHubProxy("Lobby"), Container.gameContext);
