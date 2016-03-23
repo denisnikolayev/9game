@@ -5,9 +5,9 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Game.Model;
 
-namespace Game.SignalR
+namespace Game.Hubs
 {
-    public interface IClient
+    public interface IGameContext
     {
         void LogOnClient(string message);
 

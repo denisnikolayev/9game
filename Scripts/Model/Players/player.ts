@@ -1,18 +1,27 @@
-﻿import {Card} from "./card";
+﻿import {Card} from "../card";
 import {IPlayer} from "./iplayer";
+import {PlayerInfo} from "./playerInfo";
 
 export class Player implements IPlayer {
-    money: number;
-    cards: Card[];
-    isMyTurn: boolean = false;
-    availibleCards:{[id:string]:boolean};
-    name: string;
+    info: PlayerInfo;    
+    cards: Card[];   
+    availibleCards:{[id:string]:boolean};   
 
-    constructor(name:string, money: number, cards: Card[]) {
-        this.money = money;
-        this.cards = cards;
-        this.name = name;
-        this.availibleCards = {};
+    get id():string {
+        return this.info.id;
+    }
+
+    get money(): number {
+        return this.info.money;
+    }
+    set money(value: number) {
+        this.info.money = value;
+    }
+
+    constructor(info: PlayerInfo, cards: Card[], availibleCards:Card[]) {      
+        this.cards = cards;       
+        this.info = info;
+        this.setAvailibleCard(availibleCards);
     }
 
     removeCard(card: Card) {

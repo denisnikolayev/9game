@@ -45,7 +45,7 @@ namespace Game
             
             app.UseStaticFiles();
             app.UseWebSockets();
-            app.UseSignalR("/messaging");
+            app.UseSignalR();
 
             app.UseMvc();
         }

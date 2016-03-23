@@ -1,6 +1,8 @@
-﻿// ReSharper disable once PossiblyUnassignedProperty
+﻿/// <binding ProjectOpened='Hot' />
+// ReSharper disable once PossiblyUnassignedProperty
 var path = require("path");
 var webpack = require("webpack");
+var WebpackNotifierPlugin = require('webpack-notifier');
 
 module.exports = {
     devtool: "inline-source-map",
@@ -37,7 +39,8 @@ module.exports = {
             $: "jquery",
             jQuery: "jquery",
             "window.jQuery": "jquery"
-        })
+        }),
+        new WebpackNotifierPlugin()
     ],
     debug: false,
     devServer: {
