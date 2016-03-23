@@ -25,13 +25,47 @@ namespace Game.Hubs
                 Money = 250
             };
 
-            players.TryAdd(playerInfo.Id, playerInfo);
-
-            Clients.All.Message("testst");
+            players.TryAdd(playerInfo.ConnectionId, playerInfo);           
 
             Clients.Caller.Registered(playerInfo);
-            Clients.All.Registered(playerInfo);
+        }
 
+        public static GameContext game;
+
+        public void ConnectToRandomGame()
+        {
+            PlayerInfo playerInfo = null;
+            players.TryGetValue(Context.ConnectionId, out playerInfo);
+
+            if (game == null)
+            {
+                game = new GameContext();
+                game.Players[game.CurrentPlayer++] = new Player(playerInfo);
+                Clients.Caller.Connected(game.Id.ToString());
+            }
+            else
+            {
+                Clients.Caller.Connected(game.Id.ToString());
+
+                game.Players[game.CurrentPlayer++] = new Player(playerInfo);
+                if (game.CurrentPlayer == 3)
+                {
+                    game.ShuffleCards();
+                    var player = game.Players.First(a => a.Cards.Any(b => b.Suit == 3 && b.Index == 9));
+
+                    game.CurrentPlayer = Array.IndexOf(game.Players, player);
+
+                    var playersInfo = game.Players.Select(a => a.Info).ToArray();
+                    foreach (var p in game.Players)
+                    {
+                        Clients.Client(p.ConnectionId).GameStart(
+                             playersInfo
+                            , p.Money
+                            , p.Cards
+                            , p == player ? new[] { new Card { Suit = 3, Index = 9 } } : new Card[0]);
+                    }
+                }
+            }
         }
 
         public override Task OnConnected()

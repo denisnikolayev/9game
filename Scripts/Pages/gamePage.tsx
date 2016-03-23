@@ -2,18 +2,27 @@
 import {Card, cardsBackgroundsCache} from "../model/card";
 import {suits, indexes, size} from "../model/consts";
 import {GameContext} from "../model/gameContext";
+import {Container} from "../model/container";
 
-export class GamePage extends React.Component<{ gameContext: GameContext }, {}> {
+export class GamePage extends React.Component<{}, { gameContext: GameContext }> {
     constructor() {
-        super();        
+        super();
+        this.state = {
+            gameContext: Container.gameContext
+        }
+        Container.gameContext.onChange = ()=>this.setState({gameContext:Container.gameContext});
     }       
-        
+    
+     componentWillUnmount() {
+        Container.gameContext.onChange = null;
+    }   
+     
     onPlayerCardClick(card: Card) {
-        this.props.gameContext.putCardOnTheTable(card);
+        this.state.gameContext.putCardOnTheTable(card);
     }
 
     render() {
-        let {gameContext} = this.props;
+        let {gameContext} = this.state;
 
         var card = (suit: number, index: number) =>
             <div key={`${suit} x ${index}`} className="card" style={{ backgroundPosition: cardsBackgroundsCache[suit][index] }} ></div>;

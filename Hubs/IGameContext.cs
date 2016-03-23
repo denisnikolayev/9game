@@ -12,10 +12,7 @@ namespace Game.Hubs
         void LogOnClient(string message);
 
         void PutCardOnTheTable(string name, Card card);
-
-        void GameBegin(Card[] cards, int money, string[] playersNames, Card[] avalibleCards);
-
-        void Connected(string name);
+        
 
         void YourTurn(Card[] cards);
 

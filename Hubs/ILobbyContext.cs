@@ -11,5 +11,9 @@ namespace Game.Hubs
         void Registered(PlayerInfo info);
 
         void Message(string message);
+
+        void Connected(string gameId);
+
+        void GameStart(PlayerInfo[] info, int bankMoney, Card[] yourCards, Card[] avaliableCards);
     }
 }

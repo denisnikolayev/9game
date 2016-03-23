@@ -52,6 +52,7 @@ module.exports = {
                 target: 'http://localhost:30155',
                 secure: false
             }
-        }
+        },
+        historyApiFallback:true
     }
 };

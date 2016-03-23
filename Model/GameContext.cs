@@ -15,6 +15,7 @@ namespace Game.Model
 
 
         public GameContext() {
+            Id = Guid.NewGuid();
             Table = Enumerable.Range(0, 4).Select(suit => Enumerable.Range(0, 15).Select(a => false).ToArray()).ToArray();
         }
 

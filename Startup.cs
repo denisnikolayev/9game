@@ -3,6 +3,7 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace Game
 {
@@ -47,7 +48,16 @@ namespace Game
             app.UseWebSockets();
             app.UseSignalR();
 
+           
+
             app.UseMvc();
+            //html5mode routing
+            app.Run(context =>
+            {                
+                context.Response.Redirect("/");
+                return Task.FromResult<object>(null);
+            });
+
         }
 
         // Entry point for the application.
