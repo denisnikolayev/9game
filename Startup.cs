@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Builder;
+﻿using Game.Model;
+using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,11 +28,12 @@ namespace Game
             services.AddMvc();
             services.AddSignalR(options =>
             {
-                options.Hubs.EnableDetailedErrors = true;
+                options.Hubs.EnableDetailedErrors = true;                
                 options.Hubs.EnableJavaScriptProxies = false;
             });
 
             services.AddCors();
+            services.AddSingleton<GameTest>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

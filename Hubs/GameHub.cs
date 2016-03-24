@@ -12,7 +12,12 @@ namespace Game.Hubs
     [HubName("Game")]
     public class GameHub : Hub<IGameContext>
     {
-        
+        readonly GameTest game;
+        public GameHub(GameTest game)
+        {
+            this.game = game;
+            this.game.game = this.Clients;
+        }
 
         public void Log(string message)
         {
@@ -40,7 +45,8 @@ namespace Game.Hubs
                 var cards = player.Cards.Where(c => c.Index == 9 || c.Index > 6 && LobbyHub.game.Table[c.Suit][c.Index - 1] || c.Index < 14 && LobbyHub.game.Table[c.Suit][c.Index + 1]).ToArray();
                 if (cards.Any())
                 {
-                    Clients.Client(player.ConnectionId).YourTurn(cards);
+                    //Clients.Client(player.ConnectionId).YourTurn(cards);
+                    game.YourTurn(player.ConnectionId, cards);
                     return;
                 }
                 else
