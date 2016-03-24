@@ -41,13 +41,19 @@ namespace Game.Hubs
             {
                 game = new GameContext();
                 game.Players[game.CurrentPlayer++] = new Player(playerInfo);
-                Clients.Caller.Connected(game.Id.ToString());
+                Clients.Caller.Connected(game.Id.ToString(), new PlayerInfo[0]);
             }
             else
             {
-                Clients.Caller.Connected(game.Id.ToString());
+                Clients.Caller.Connected(game.Id.ToString(), game.Players.Select(player => player?.Info).Where(info => info != null).ToArray());
+
+                foreach (var player in game.Players.Where(p => p != null))
+                {
+                    this.Clients.Client(player.ConnectionId).PlayersConnected(new[] { playerInfo });
+                }
 
                 game.Players[game.CurrentPlayer++] = new Player(playerInfo);
+
                 if (game.CurrentPlayer == 3)
                 {
                     game.ShuffleCards();
@@ -67,11 +73,5 @@ namespace Game.Hubs
                 }
             }
         }
-
-        public override Task OnConnected()
-        {
-            return base.OnConnected();
-        }
-
     }
 }

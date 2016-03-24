@@ -98,12 +98,12 @@ $cardSmallWidth : 55px;
     }
 
     .current_gamer {
-        margin-top: 30px;
+        margin-top: 10px;
         width: $cardWidht * 13;
         margin-left: auto;
         margin-right: auto;
         text-align: center;
-
+        line-height: $cardHeight + 20;
         .card {
             -moz-transition-property: margin-bottom;
             -o-transition-property: margin-bottom;
@@ -113,7 +113,11 @@ $cardSmallWidth : 55px;
             -o-transition-duration: 0.5s;
             -webkit-transition-duration: 0.5s;
             transition-duration: 0.5s;           
+
+            vertical-align:bottom;
+            margin-bottom: 0;
         }
+        
 
         .can {
             margin-bottom: 15px;

@@ -10,9 +10,8 @@ export class LobbyPage extends React.Component<ILobbyPageProps, { lobbyContext: 
     constructor(props:ILobbyPageProps) {
         super(props);
         this.state = { lobbyContext: Container.lobbyContext };
-        Container.lobbyContext.onChange = () => this.setState({
-            lobbyContext: Container.lobbyContext
-        });
+
+        Container.lobbyContext.onChange = () => this.setState({ lobbyContext: Container.lobbyContext });
        
         Container.lobbyContext.checkGameId(this.props.location.query.gameId);        
     }   
@@ -30,17 +29,20 @@ export class LobbyPage extends React.Component<ILobbyPageProps, { lobbyContext: 
             </div>;
     }    
 
-    stateWaitGamers() {
-        return <div>Waiting</div>;
+    stateWaitGamers() {       
+        var connectedUsers = Container.lobbyContext.connectedPlayers.map(playerInfo=> <div>{playerInfo.name}</div>);
+        return (
+            <div> 
+                 <div>Waiting</div>
+                 <div>Connected players: </div>
+                 {connectedUsers}
+            </div>
+        );            
     }
     
 
     render() {
-        const {lobbyContext} = this.state;               
-
-        if (!lobbyContext.currentPlayer) {
-            return <div>Registering...</div>;
-        }
+        const {lobbyContext} = this.state; 
 
         return (
             <div>

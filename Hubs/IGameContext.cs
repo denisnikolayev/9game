@@ -16,6 +16,6 @@ namespace Game.Hubs
 
         void YourTurn(Card[] cards);
 
-        void SkipTurn(string name);
+        void SkipTurn(string playerId, int lostMoney);
     }
 }

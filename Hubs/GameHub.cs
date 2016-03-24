@@ -30,6 +30,8 @@ namespace Game.Hubs
             }
 
             LobbyHub.game.Table[card.Suit][card.Index] = true;
+            var pp = LobbyHub.game.Players.First(a => a.ConnectionId == Context.ConnectionId);
+            pp.Cards = pp.Cards.Except(pp.Cards.Where(a => a.Suit == card.Suit && a.Index == card.Index)).ToArray();
 
             while (true)
             {
@@ -45,7 +47,7 @@ namespace Game.Hubs
                 {
                     foreach (var p in LobbyHub.game.Players)
                     {
-                        Clients.Client(p.ConnectionId).SkipTurn(player.Id);
+                        Clients.Client(p.ConnectionId).SkipTurn(player.Id, 50);
                     }
                 }
             }

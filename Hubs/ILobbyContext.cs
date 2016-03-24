@@ -12,8 +12,10 @@ namespace Game.Hubs
 
         void Message(string message);
 
-        void Connected(string gameId);
+        void Connected(string gameId, PlayerInfo[] players);
 
         void GameStart(PlayerInfo[] info, int bankMoney, Card[] yourCards, Card[] avaliableCards);
+
+        void PlayersConnected(PlayerInfo[] players);
     }
 }

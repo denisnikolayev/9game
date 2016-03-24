@@ -13,6 +13,7 @@ export class LobbyContext {
     
 
     currentPlayer: PlayerInfo;    
+    connectedPlayers: PlayerInfo[];
 
     private gameId:string;
     private lobbyServer: SignalR.Hub.Proxy
@@ -25,6 +26,7 @@ export class LobbyContext {
         this.onGameStart = () => { };
         this.onChange = () => { };
         this.gameContext = gameContext;
+        this.connectedPlayers = [];
 
         subscribe(this, this.lobbyServer);          
     }      
@@ -36,17 +38,15 @@ export class LobbyContext {
         this.onChange();
     }
 
-    serverConnected(gameId: string) {
+    serverConnected(gameId: string, players: PlayerInfo[]) {        
+        this.connectedPlayers = players;
         this.gameId = gameId;
         this.onConnected(gameId);
     } 
 
-    serverPlayerConnected(player: PlayerInfo) {
-
-    }
-
-    serverMessage(message: string) {
-        console.log(message);
+    serverPlayersConnected(players: PlayerInfo[]) {
+        for (var player of players) this.connectedPlayers.push(player);
+        this.onChange();
     }
 
     serverGameStart(players: PlayerInfo[], bankMoney: number, yourCards: Card[], avaliableCards: Card[]) {       
@@ -64,12 +64,14 @@ export class LobbyContext {
     }  
 
     connectToRandomGame() {        
+        this.connectedPlayers = [];
         this.lobbyServer.invoke("ConnectToRandomGame");
     }
 
     checkGameId(gameId:string) {
         if (gameId != this.gameId){
             // change
+            
             this.lobbyServer.invoke("ConnectToRandomGame");
         }
     }
