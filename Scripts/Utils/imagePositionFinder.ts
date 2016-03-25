@@ -41,8 +41,8 @@ export class ImagePositionFinder {
             let row: string[] = [];
             for (let index of indexes) {
                 var card = lines[suit][index == 14 ? 1 : index];
-                var left = 2 + (size.width + spaceBetweenCards.width) * card.x;
-                var top = 2 + (size.height + spaceBetweenCards.height) * card.y;
+                var left = 1 + (size.width + spaceBetweenCards.width) * card.x;
+                var top = 1 + (size.height + spaceBetweenCards.height) * card.y;
 
                 row[index] = `-${left}px -${top}px`;
             }

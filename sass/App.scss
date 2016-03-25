@@ -1,5 +1,5 @@
-﻿$cardWidht : 109px;
-$cardHeight : 150px;
+﻿$cardWidth : 109px * 0.7;
+$cardHeight : 150px * 0.7;
 
 body, html {
     background-color:#008080;    
@@ -10,7 +10,7 @@ body, html {
 }
 
 .emptyCard {
-    width:$cardWidht;
+    width:$cardWidth;
     height:$cardHeight;  
     margin:2px;
     display: inline-block; 
@@ -20,7 +20,8 @@ body, html {
 
 .card {
     @extend .emptyCard;
-    background: url('../images/cards.jpg')  no-repeat;   
+    background: url('../images/cards-small.jpg')  no-repeat;   
+    //background-size: ($cardWidth + 2) * 9, ($cardHeight + 4) * 9;
 }
 
 .back {
@@ -78,7 +79,7 @@ $cardSmallWidth : 55px;
     .main {
         margin-left: auto;
         margin-right: auto;
-        width: 9 * $cardWidht + 4 * 9 + 20;
+        width: 9 * $cardWidth + 4 * 9 + 20;
         padding: 5px;
         -moz-border-image: url(../images/chalk_border.png) 20 20 20 20 repeat repeat;
         -o-border-image: url(../images/chalk_border.png) 20 20 20 20 repeat repeat;
@@ -99,7 +100,7 @@ $cardSmallWidth : 55px;
 
     .current_gamer {
         margin-top: 10px;
-        width: $cardWidht * 13;
+        width: $cardWidth * 13;
         margin-left: auto;
         margin-right: auto;
         text-align: center;
