@@ -34,64 +34,55 @@ namespace Game.Model
 
             CurrentPlayer = Array.IndexOf(Players, player);
         }
-        
+             
 
-        public void PutCardOnTheTable(Card card, Player currentPlayer)
+
+        public void PutCardOnTheTable(Card card, Player player)
         {
-            Player nextPlayer;
-            var state = "putCard";
+        PuttingCard:
+            PutCard(card, player);
+            goto MovingToNextPlayer;
 
-            switch (state)
+
+        MovingToNextPlayer:
+            player = MoveTurnToNextPlayer();
+            player.AvailableCards = player.Cards.Where(CanPutCard).ToArray();
+
+            if (player.AvailableCards.Any())
             {
-                case "putCard":
-                    PutCard(card, currentPlayer);
-                    nextPlayer = MoveTurnToNextPlayer();
-                    nextPlayer.AvailableCards = nextPlayer.Cards.Where(CanPutCard).ToArray();
-                    if (nextPlayer.AvailableCards.Any())
-                    {
-
-                    }
-                    else
-                    {
-
-                    }
-                case "Skip":
-                    foreach (var p in Players)
-                    {
-                        p.Game.SkipTurn(nextPlayer.Id, 50);
-                    }
-                case ""
-            }
-
-            do
-            {
-                
-
-
-                
-                do
+                if (player.IsHuman)
                 {
-                    
-
-                    if (nextPlayer.AvailableCards.Any())
-                    {
-                        
-                    }
-                } while (!nextPlayer.AvailableCards.Any());
-
-
-                if (nextPlayer.IsHuman)
-                {
-                    nextPlayer.Game.YourTurn(nextPlayer.AvailableCards);
+                    goto WaitHumanChoose;
                 }
                 else
                 {
-                    card = ComputerChooseCard(nextPlayer);
-                    currentPlayer = nextPlayer;
+                    goto ComputerChoosingCard;
                 }
+            }
+            else
+            {
+                goto SkippingTurn;
+            }
 
-            } while (!currentPlayer.IsHuman);
+
+        SkippingTurn:
+            foreach (var p in Players)
+            {
+                p.Game.SkipTurn(player.Id, 50);
+            }
+            goto MovingToNextPlayer;
+
+
+        ComputerChoosingCard:
+            card = ComputerChooseCard(player);
+            goto PuttingCard;
+
+
+        WaitHumanChoose:
+            player.Game.YourTurn(player.AvailableCards);
+            return;
         }
+
 
         private void PutCard(Card card, Player currentPlayer)
         {

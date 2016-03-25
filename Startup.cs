@@ -38,7 +38,7 @@ namespace Game
             services.AddCors();
             services.AddSingleton<GamesStore>();
             services.AddSingleton<UsersStore>();
-            services.AddSingleton<GamesBuildersStore>();
+            services.AddSingleton<GameBuildersStore>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
