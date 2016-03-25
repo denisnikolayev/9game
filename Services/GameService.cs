@@ -29,11 +29,17 @@ namespace Game.Services
             var user = _userStore.GetByConnectionId(Context.ConnectionId);
             var game = _gameStore.Load(gameId);
 
-            var currentPlayer = game.Player(user);
+            var player = game.Player(user);
+
+            if (!game.ValidateStep(player, card))
+            {
+                return;
+            }
+
 
             lock (game._lockObject)
             {
-                game.PutCardOnTheTable(card, currentPlayer);
+                game.PutCardOnTheTable(player, card);
             }
         }
 

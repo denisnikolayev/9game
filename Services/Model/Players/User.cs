@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Game.Model
 {
-    public class User
+    public class User 
     {
         [JsonProperty("id")]
         public string Id { get; set; }
@@ -22,5 +22,11 @@ namespace Game.Model
 
         [JsonProperty("connectionId")]
         public string ConnectionId { get; set; }
+
+
+        public override int GetHashCode() => this.Id.GetHashCode();       
+        public override bool Equals(object other) =>  this?.Id == (other as User)?.Id;
+        public static bool operator ==(User a, User b) => Object.ReferenceEquals(a, b) || a?.Equals(b) == true;
+        public static bool operator !=(User a, User b) => !(a == b);
     }
 }

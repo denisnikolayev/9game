@@ -40,8 +40,6 @@ namespace Game.Services
         {
             var game = _gameBuildersStore.Load(gameId);
             game.Connect(User);
-
-            _gameBuildersStore.Save(game);
         }
 
         public void ConnectToRandomGame()
@@ -56,8 +54,7 @@ namespace Game.Services
                 }
                 last.Connect(User);
 
-                _gameBuildersStore.LastUnStarted = last;
-                _gameBuildersStore.Save(_gameBuildersStore.LastUnStarted);
+                _gameBuildersStore.LastUnStarted = last;                
             }
         }
     }

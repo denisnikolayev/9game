@@ -15,6 +15,7 @@ namespace Game.Model
         public Player[] Players { get; set; }
         public int BankMoney { get; set; }
         public int CurrentPlayer {get; set;} = 0;
+       
 
         public readonly object _lockObject = new Object();
 
@@ -37,12 +38,22 @@ namespace Game.Model
              
 
 
-        public void PutCardOnTheTable(Card card, Player player)
+        public void PutCardOnTheTable(Player player, Card card)
         {
+        // Implementation of the state machine
+        // In this case it is much clearly for understanding
+        // https://raw.githubusercontent.com/denisnikolayev/9game/master/Docs/StateMachine.png
+
         PuttingCard:
             PutCard(card, player);
-            goto MovingToNextPlayer;
-
+            if (AllCardsHaveBeenPutted)
+            {
+                goto Finish;
+            }
+            else
+            {
+                goto MovingToNextPlayer;
+            }
 
         MovingToNextPlayer:
             player = MoveTurnToNextPlayer();
@@ -66,6 +77,9 @@ namespace Game.Model
 
 
         SkippingTurn:
+            player.Money -= 50;
+            BankMoney += 50;
+
             foreach (var p in Players)
             {
                 p.Game.SkipTurn(player.Id, 50);
@@ -81,7 +95,12 @@ namespace Game.Model
         WaitHumanChoose:
             player.Game.YourTurn(player.AvailableCards);
             return;
+
+        Finish:
+            //TODO: finish
+            return;
         }
+
 
 
         private void PutCard(Card card, Player currentPlayer)
@@ -105,15 +124,39 @@ namespace Game.Model
             return Players[CurrentPlayer];
         }
 
-        private bool CanPutCard(Card card)
+        public bool CanPutCard(Card card)
         {
             return card.Index == 9
                    || card.Index > 6 && Table[card.Suit][card.Index - 1]
                    || card.Index < 14 && Table[card.Suit][card.Index + 1];
         }
+
         public Player Player(User user)
         {
             return Players.First(a => a.Info == user);
+        }
+
+        public bool AllCardsHaveBeenPutted
+        {
+            get
+            {
+                return !Table.Any(suit => Enumerable.Range(6, 9).Any(index => suit[index])); 
+            }
+        }
+
+        public bool ValidateStep(Player player, Card card)
+        {
+            if (!CanPutCard(card))
+            {
+                return false;
+            }
+
+            if (!player.AvailableCards.Contains(card))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
