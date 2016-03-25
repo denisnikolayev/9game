@@ -5,6 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using Game.Hubs.Services;
+using Game.Hubs.Services.Store;
+using Game.Services.Stores;
 
 namespace Game
 {
@@ -33,7 +36,8 @@ namespace Game
             });
 
             services.AddCors();
-            services.AddSingleton<GameTest>();
+            services.AddSingleton<GamesStore>();
+            services.AddSingleton<UsersStore>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,5 +1,6 @@
-﻿import {suits, indexes, size} from '../model/consts';
+﻿import {suits, indexes} from '../model/consts';
 
+export const size = { width: 109 * 0.7, height: 150 * 0.7 };  // change there, change in app.scss
 const spaceBetweenCards = { width: 2, height: 4 };
 
 interface Point {

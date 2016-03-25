@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import {Card, cardsBackgroundsCache} from "../model/card";
-import {suits, indexes, size} from "../model/consts";
+import {suits, indexes} from "../model/consts";
 import {GameContext} from "../model/gameContext";
 import {Container} from "../model/container";
 
