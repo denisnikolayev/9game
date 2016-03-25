@@ -38,8 +38,9 @@ namespace Game.Services
 
         public void ConnectToGame(Guid gameId)
         {
-            var game = _gameBuildersStore.Load(gameId);
-            game.Connect(User);
+            _gameBuildersStore
+                .Load(gameId)
+                .Connect(User);
         }       
 
 
@@ -62,8 +63,9 @@ namespace Game.Services
 
         public void CreateFriendGame()
         {
-            var game = _gameBuildersStore.Create();
-            game.Connect(User);
+            _gameBuildersStore
+                .Create()
+                .Connect(User);
         }
 
         public void PlayWithComputer()
