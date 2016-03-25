@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Game.Hubs.Services;
 using Game.Hubs.Services.Store;
 using Game.Services.Stores;
+using Game.Services.Model;
 
 namespace Game
 {
@@ -39,6 +40,7 @@ namespace Game
             services.AddSingleton<GamesStore>();
             services.AddSingleton<UsersStore>();
             services.AddSingleton<GameBuildersStore>();
+            services.AddSingleton<ComputerBrain>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Game.Hubs;
 using Game.Services;
 using Microsoft.AspNet.SignalR.Infrastructure;
+using Game.Services.Model;
 
 namespace Game.Model
 {
@@ -14,16 +15,19 @@ namespace Game.Model
         public bool[][] Table { get; set; }
         public Player[] Players { get; set; }
         public int BankMoney { get; set; }
-        public int CurrentPlayer {get; set;} = 0;
-       
+        public int CurrentPlayerIndex {get; set;} = 0;
+
+        public Player CurrentPlayer => Players[CurrentPlayerIndex];
 
         public readonly object _lockObject = new Object();
+        private readonly ComputerBrain _computerBrain;
 
-        public GameContext(Player[] players, Guid gameId)
+        public GameContext(Player[] players, Guid gameId, ComputerBrain computerBrain)
         {
             Table = Enumerable.Range(0, 4).Select(suit => new bool[15]).ToArray();
             Id = gameId;
             Players = players;
+            _computerBrain = computerBrain;
 
             SetFirstPlayer();
         }
@@ -33,7 +37,7 @@ namespace Game.Model
             var player = Players.First(a => a.Cards.Any(b => b.Suit == 3 && b.Index == 9));
             player.AvailableCards = new[] {new Card {Suit = 3, Index = 9}};
 
-            CurrentPlayer = Array.IndexOf(Players, player);
+            CurrentPlayerIndex = Array.IndexOf(Players, player);
         }
              
 
@@ -44,15 +48,25 @@ namespace Game.Model
         // In this case it is much clearly for understanding
         // https://raw.githubusercontent.com/denisnikolayev/9game/master/Docs/StateMachine.png
 
-        PuttingCard:
-            PutCard(card, player);
-            if (AllCardsHaveBeenPutted)
+            if (!player.IsHuman)
             {
-                goto Finish;
+                goto ComputerChoosingCard;
             }
             else
             {
-                goto MovingToNextPlayer;
+                goto PuttingCard;    
+            }
+
+        PuttingCard:            
+            PutCard(card, player);
+
+            if (player.Cards.Any())
+            {
+                goto MovingToNextPlayer; 
+            }
+            else
+            {
+                goto Finish;
             }
 
         MovingToNextPlayer:
@@ -88,7 +102,7 @@ namespace Game.Model
 
 
         ComputerChoosingCard:
-            card = ComputerChooseCard(player);
+            card = _computerBrain.ChooseCard(Table, player);
             goto PuttingCard;
 
 
@@ -113,15 +127,10 @@ namespace Game.Model
             currentPlayer.RemoveCard(card);
         }
 
-        private Card ComputerChooseCard(Player player)
-        {
-            return null;
-        }
-
         private Player MoveTurnToNextPlayer()
         {
-            CurrentPlayer = (CurrentPlayer + 1)%3;
-            return Players[CurrentPlayer];
+            CurrentPlayerIndex = (CurrentPlayerIndex + 1)%3;
+            return Players[CurrentPlayerIndex];
         }
 
         public bool CanPutCard(Card card)
@@ -133,14 +142,14 @@ namespace Game.Model
 
         public Player Player(User user)
         {
-            return Players.First(a => a.Info == user);
+            return Players.First(a => a.User == user);
         }
 
         public bool AllCardsHaveBeenPutted
         {
             get
             {
-                return !Table.Any(suit => Enumerable.Range(6, 9).Any(index => suit[index])); 
+                return !Table.Any(suit => Enumerable.Range(6, 9).Any(index => suit[index] == false)); 
             }
         }
 

@@ -40,7 +40,8 @@ namespace Game.Services
         {
             var game = _gameBuildersStore.Load(gameId);
             game.Connect(User);
-        }
+        }       
+
 
         public void ConnectToRandomGame()
         {
@@ -56,6 +57,21 @@ namespace Game.Services
 
                 _gameBuildersStore.LastUnStarted = last;                
             }
+        }
+
+
+        public void CreateFriendGame()
+        {
+            var game = _gameBuildersStore.Create();
+            game.Connect(User);
+        }
+
+        public void PlayWithComputer()
+        {
+            var game = _gameBuildersStore.Create();
+            game.Connect(User);
+            game.Connect(_usersStore.CreateComputer());
+            game.Connect(_usersStore.CreateComputer());
         }
     }
 }

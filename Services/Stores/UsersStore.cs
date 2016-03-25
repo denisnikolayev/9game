@@ -9,7 +9,8 @@ namespace Game.Services.Stores
 {
     public class UsersStore
     {
-        static readonly ConcurrentDictionary<string, User> players = new ConcurrentDictionary<string, User>();
+        readonly ConcurrentDictionary<string, User> players = new ConcurrentDictionary<string, User>();
+        Random _random = new Random();
 
         public User Register(string name, string connectionId)
         {
@@ -18,12 +19,26 @@ namespace Game.Services.Stores
                 Id = Guid.NewGuid().ToString(),
                 Name = name,
                 ConnectionId = connectionId,
-                Money = 250
+                Money = 250,
+                IsHuman = true
             };
 
             players.TryAdd(playerInfo.ConnectionId, playerInfo);
 
             return playerInfo;
+        }
+        
+
+        public User CreateComputer()
+        {
+            return new User()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = $"Computer #{_random.Next(9999)}",
+                ConnectionId = null,
+                Money = 250,
+                IsHuman = false
+            };
         }
 
         public User GetByConnectionId(string connectionId)

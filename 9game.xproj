@@ -19,6 +19,7 @@
     <DnxInvisibleFolder Include=".git\" />
     <DnxInvisibleFolder Include=".vscode\" />
     <DnxInvisibleFolder Include=".vs\" />
+    <DnxInvisibleFolder Include="Docs\" />
   </ItemGroup>
   <ItemGroup>
     <DnxInvisibleContent Include="tests.js" />

@@ -11,7 +11,7 @@ namespace Game.Hubs.Services.Store
     public class GameBuildersStore
     {
         private readonly IConnectionManager _manager;
-        private readonly GamesStore _gamesStore;
+        private readonly GamesStore _gamesStore;        
         ConcurrentDictionary<Guid, GameBuilder> _gameBuildersStore = new ConcurrentDictionary<Guid, GameBuilder>();
         
         public GameBuilder LastUnStarted;
@@ -24,13 +24,6 @@ namespace Game.Hubs.Services.Store
         }
 
         public GameBuilder Create()
-        {
-            var game = new GameBuilder(_manager, _gamesStore);
-            _gameBuildersStore.TryAdd(game.GameId, game);
-            return game;
-        }
-
-        public GameBuilder CreateOrGetLastUnstarted()
         {
             var game = new GameBuilder(_manager, _gamesStore);
             _gameBuildersStore.TryAdd(game.GameId, game);

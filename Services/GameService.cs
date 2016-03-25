@@ -31,15 +31,12 @@ namespace Game.Services
 
             var player = game.Player(user);
 
-            if (!game.ValidateStep(player, card))
+            if (game.ValidateStep(player, card))
             {
-                return;
-            }
-
-
-            lock (game._lockObject)
-            {
-                game.PutCardOnTheTable(player, card);
+                lock (game._lockObject)
+                {
+                    game.PutCardOnTheTable(player, card);
+                }
             }
         }
 

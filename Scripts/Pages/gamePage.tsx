@@ -3,6 +3,7 @@ import {Card, cardsBackgroundsCache} from "../model/card";
 import {suits, indexes} from "../model/consts";
 import {GameContext} from "../model/gameContext";
 import {Container} from "../model/container";
+import {browserHistory} from 'react-router'
 
 export class GamePage extends React.Component<{}, { gameContext: GameContext }> {
     constructor() {
@@ -21,8 +22,13 @@ export class GamePage extends React.Component<{}, { gameContext: GameContext }> 
         this.state.gameContext.putCardOnTheTable(card);
     }
 
-    render() {
+    render() {        
         let {gameContext} = this.state;
+
+        if (!gameContext.gameId) {
+            setTimeout(() => browserHistory.push("/"));
+            return <div>Redirecting</div>;
+        }
 
         var card = (suit: number, index: number) =>
             <div key={`${suit} x ${index}`} className="card" style={{ backgroundPosition: cardsBackgroundsCache[suit][index] }} ></div>;

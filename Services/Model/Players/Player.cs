@@ -10,35 +10,33 @@ namespace Game.Model
         {
             get
             {
-                return Info.Id;
+                return User.Id;
             }
         }
         public int Money
         {
             get
             {
-                return Info.Money;
+                return User.Money;
             }
             set
             {
-                Info.Money = value;
+                User.Money = value;
             }
-        }
-
-        public string ConnectionId => Info.ConnectionId;
+        }       
 
         public Card[] Cards { get; set; }
         public Card[] AvailableCards { get; set; }
         
-        public User Info { get; set; }
+        public User User { get; set; }
 
         public IGameContext Game { get; private set; }
         public ILobbyContext Lobby { get; private set; }
-        public bool IsHuman { get; set; } = true;
+        public bool IsHuman => User.IsHuman;
 
         public Player(User info, IGameContext game, ILobbyContext lobby)
         {
-            this.Info = info;
+            this.User = info;
             this.Game = game;
             this.Lobby = lobby;
         }
@@ -46,6 +44,11 @@ namespace Game.Model
         public void RemoveCard(Card card)
         {
             Cards = Cards.Except(Cards.Where(a => a.Suit == card.Suit && a.Index == card.Index)).ToArray();
+        }
+
+        public static implicit operator User(Player player)
+        {
+            return player?.User;
         }
     }
 }

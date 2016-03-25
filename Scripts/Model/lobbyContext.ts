@@ -44,14 +44,14 @@ export class LobbyContext {
         this.onConnected(gameId);
     } 
 
-    serverPlayersConnected(players: PlayerInfo[]) {
-        for (var player of players) this.connectedPlayers.push(player);
+    serverPlayerConnected(player: PlayerInfo) {
+        this.connectedPlayers.push(player);
         this.onChange();
     }
 
     serverGameStart(players: PlayerInfo[], bankMoney: number, yourCards: Card[], avaliableCards: Card[]) {       
-        var player = new Player(this.currentPlayer, yourCards, avaliableCards);
-        this.gameContext.beginGame(players, bankMoney, player);     
+        var player = new Player(this.currentPlayer, yourCards, avaliableCards || []);
+        this.gameContext.beginGame(this.gameId, players, bankMoney, player);     
         this.onGameStart();
     }
 
@@ -63,16 +63,22 @@ export class LobbyContext {
         });
     }  
 
-    connectToRandomGame() {        
-        this.connectedPlayers = [];
+    connectToRandomGame() {
         this.lobbyServer.invoke("ConnectToRandomGame");
     }
 
+    createFriendGame() {
+        this.lobbyServer.invoke("CreateFriendGame");
+    }
+
+    playWithComputer() {
+        this.lobbyServer.invoke("PlayWithComputer");
+    }
+
     checkGameId(gameId:string) {
-        if (gameId != this.gameId){
-            // change
-            
-            this.lobbyServer.invoke("ConnectToRandomGame");
+        if (gameId != this.gameId){            
+            this.gameId = gameId;
+            this.lobbyServer.invoke("ConnectToGame", gameId);
         }
     }
 }

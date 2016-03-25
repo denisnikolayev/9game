@@ -23,6 +23,8 @@ namespace Game.Model
         [JsonProperty("connectionId")]
         public string ConnectionId { get; set; }
 
+        [JsonProperty("isHuman")]
+        public bool IsHuman { get; set; }
 
         public override int GetHashCode() => this.Id.GetHashCode();       
         public override bool Equals(object other) =>  this?.Id == (other as User)?.Id;

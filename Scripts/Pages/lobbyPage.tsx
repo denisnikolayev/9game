@@ -23,14 +23,14 @@ export class LobbyPage extends React.Component<ILobbyPageProps, { lobbyContext: 
     stateChooseGame() {
         let {lobbyContext} = this.state;
         return <div>
-                    <button onClick={() => lobbyContext.connectToRandomGame() } > ConnectToRandomGame</button>
-                    <button>CreateFriendGame</button>
-                    <button>PlayWithComputer</button>
+                    <button onClick={() => lobbyContext.connectToRandomGame() }> Connect to a random game</button>
+                    <button onClick={() => lobbyContext.createFriendGame() }>Create friend game</button>
+                    <button onClick={() => lobbyContext.playWithComputer() }>Play with a computer</button>
             </div>;
     }    
 
     stateWaitGamers() {       
-        var connectedUsers = Container.lobbyContext.connectedPlayers.map(playerInfo=> <div>{playerInfo.name}</div>);
+        var connectedUsers = Container.lobbyContext.connectedPlayers.map(playerInfo=> <div key={playerInfo.id}>{playerInfo.name}</div>);
         return (
             <div> 
                  <div>Waiting</div>

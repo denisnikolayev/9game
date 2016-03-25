@@ -7,6 +7,7 @@ using Game.Hubs.Services.Store;
 using Game.Model;
 using Game.Services.Stores;
 using Microsoft.AspNet.SignalR.Infrastructure;
+using Game.Services.Model.Stubs;
 
 namespace Game.Services.Model
 {
@@ -16,13 +17,15 @@ namespace Game.Services.Model
 
         private readonly IConnectionManager _manager;
         private readonly GamesStore _gameStore;
+        
+
         public List<Player> Players { get; set; } = new List<Player>();
 
         private readonly object _lockObject = new Object();
 
         public GameBuilder(IConnectionManager manager, GamesStore gameStore)
         {
-            GameId = new Guid();
+            GameId = Guid.NewGuid();
             _manager = manager;
             _gameStore = gameStore;
         }
@@ -43,11 +46,16 @@ namespace Game.Services.Model
                 if (IsFull())
                 {
                     ShuffleCards();
-                    StartGame();
+                    var game = StartGame();
 
                     foreach (var p in Players)
                     {
-                        p.Lobby.GameStart(Players.Select(k => k.Info).ToArray(), p.Money, p.Cards, p.AvailableCards);
+                        p.Lobby.GameStart(Players.Select(k => k.User).ToArray(), p.Money, p.Cards, p.AvailableCards);
+                    }
+                    
+                    if (!game.CurrentPlayer.IsHuman)
+                    {
+                        game.PutCardOnTheTable(game.CurrentPlayer, null);
                     }
                 }
             }
@@ -55,24 +63,33 @@ namespace Game.Services.Model
 
         private void AddPlayer(User user)
         {
-            var player = new Player(user,
-                 _manager.GetHubContext<GameService, IGameContext>().Clients.Client(user.ConnectionId),
-                 _manager.GetHubContext<LobbyServices, ILobbyContext>().Clients.Client(user.ConnectionId)
-                );
+            Player player;
+            if (user.IsHuman)
+            {
+                player = new Player(user,
+                     _manager.GetHubContext<GameService, IGameContext>().Clients.Client(user.ConnectionId),
+                     _manager.GetHubContext<LobbyServices, ILobbyContext>().Clients.Client(user.ConnectionId)
+                    );
 
-            player.Lobby.Connected(GameId, Players.Select(k => k.Info).ToArray());
+                player.Lobby.Connected(GameId, Players.Select(k => k.User).ToArray());
+            }
+            else
+            {
+                player = new Player(user, new GameContextStub(), new LobbyContextStub());               
+            }
 
             Players.Add(player);
         }
+       
 
         private bool CheckUniquePlayer(User user)
         {
-            return Players.Any(a => a?.Info == user);
+            return Players.Any(a => a?.User == user);
         }
 
-        private void StartGame()
+        private GameContext StartGame()
         {
-            _gameStore.Create(Players.ToArray(), GameId);
+            return _gameStore.Create(Players.ToArray(), GameId);
         }
 
         public bool IsFull()

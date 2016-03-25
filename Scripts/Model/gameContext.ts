@@ -9,17 +9,20 @@ import {Player} from "./players/player";
 import {IPlayer} from "./players/iplayer";
 import {PlayerInfo} from "./players/playerInfo";
 
+
 export class GameContext {
     cardsWereOpened: boolean[][];
 
     leftOpponent: Opponent;
     rightOpponent: Opponent;
     player: Player;
-    
+    gameId: string;
     bankMoney: number;
 
     private server: SignalR.Hub.Proxy;
     private players: { [id: string]: IPlayer };
+
+    
 
     onChange: () => void;
     onFinish: (gameResult: GameResult) => void;
@@ -32,10 +35,11 @@ export class GameContext {
         subscribe(this, this.server);
     }
 
-    beginGame(players: PlayerInfo[], bankMoney: number, player: Player) {
+    beginGame(gameId:string, players: PlayerInfo[], bankMoney: number, player: Player) {
         this.cardsWereOpened = suits.map(i => range(lengthOfLine, false));
 
         this.player = player;
+        this.gameId = gameId;
 
         this.setCorrectOpponents(players);
         this.createPlayersCache();
@@ -75,7 +79,7 @@ export class GameContext {
     putCardOnTheTable(card: Card) {
         this.player.setAvailibleCard([]);
         this.onChange();
-        this.server.invoke("putCardOnTheTable", card);
+        this.server.invoke("putCardOnTheTable", this.gameId, card);
     }
 
 
