@@ -8,14 +8,14 @@ namespace Game.Hubs
 {
     public interface ILobbyContext
     {
-        void Registered(PlayerInfo info);
+        void Registered(User info);
 
         void Message(string message);
 
-        void Connected(Guid gameId, PlayerInfo[] players);
+        void Connected(Guid gameId, User[] users);
 
-        void GameStart(PlayerInfo[] info, int bankMoney, Card[] yourCards, Card[] avaliableCards);
+        void GameStart(User[] info, int bankMoney, Card[] yourCards, Card[] avaliableCards);
 
-        void PlayerConnected(PlayerInfo player);
+        void PlayerConnected(User user);
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Game.Model
 {
-    public class PlayerInfo
+    public class User
     {
         [JsonProperty("id")]
         public string Id { get; set; }

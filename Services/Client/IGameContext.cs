@@ -9,10 +9,7 @@ namespace Game.Hubs
 {
     public interface IGameContext
     {
-        void LogOnClient(string message);
-
         void PutCardOnTheTable(string name, Card card);
-        
 
         void YourTurn(Card[] cards);
 

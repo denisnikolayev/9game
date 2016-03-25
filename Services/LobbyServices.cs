@@ -18,14 +18,14 @@ namespace Game.Services
     [HubName("Lobby")]
     public class LobbyServices : Hub<ILobbyContext>
     {
-        private readonly GamesStore _gamesStore;
+        private readonly GameBuildersStore _gameBuildersStore;
         private readonly UsersStore _usersStore;
         
-        private PlayerInfo User => _usersStore[Context.ConnectionId];
+        private User User => _usersStore.GetByConnectionId(Context.ConnectionId);
 
-        public LobbyServices(GamesStore gamesStore, UsersStore usersStore)
+        public LobbyServices(UsersStore usersStore, GameBuildersStore gameBuildersStore)
         {
-            _gamesStore = gamesStore;
+            _gameBuildersStore = gameBuildersStore;
             _usersStore = usersStore;
         }
 
@@ -38,27 +38,26 @@ namespace Game.Services
 
         public void ConnectToGame(Guid gameId)
         {
-            var playerInfo = _usersStore[Context.ConnectionId];
-            var game = _gamesStore.Load(gameId);
+            var game = _gameBuildersStore.Load(gameId);
             game.Connect(User);
 
-            _gamesStore.Save(game);
+            _gameBuildersStore.Save(game);
         }
 
         public void ConnectToRandomGame()
         {
-            lock (_gamesStore.LockForLastUnStarted)
+            lock (_gameBuildersStore.LockForLastUnStarted)
             {
-                var last = _gamesStore.LastUnStarted;
+                var last = _gameBuildersStore.LastUnStarted;
 
-                if (last == null || last.isFull())
+                if (last == null || last.IsFull())
                 {
-                    last = _gamesStore.Create();
+                    last = _gameBuildersStore.Create();
                 }
                 last.Connect(User);
 
-                _gamesStore.LastUnStarted = last;
-                _gamesStore.Save(_gamesStore.LastUnStarted);
+                _gameBuildersStore.LastUnStarted = last;
+                _gameBuildersStore.Save(_gameBuildersStore.LastUnStarted);
             }
         }
     }

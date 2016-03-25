@@ -10,97 +10,119 @@ namespace Game.Model
 {
     public class GameContext
     {
-        private readonly IConnectionManager _manager;
         public Guid Id { get; set; }
         public bool[][] Table { get; set; }
-        public Player[] Players { get; set; } = new Player[3];
+        public Player[] Players { get; set; }
         public int BankMoney { get; set; }
         public int CurrentPlayer {get; set;} = 0;
 
+        public readonly object _lockObject = new Object();
 
-        public GameContext(IConnectionManager manager) {
-            _manager = manager;
+        public GameContext(Player[] players, Guid gameId)
+        {
+            Table = Enumerable.Range(0, 4).Select(suit => new bool[15]).ToArray();
+            Id = gameId;
+            Players = players;
 
-            Id = Guid.NewGuid();
-            Table = Enumerable.Range(0, 4).Select(suit => Enumerable.Range(0, 15).Select(a => false).ToArray()).ToArray();
+            SetFirstPlayer();
         }
 
-        public void ShuffleCards()
+        private void SetFirstPlayer()
         {
-            var rnd = new Random();
-            var cards = from suit in Enumerable.Range(0, 4)
-                        from index in Enumerable.Range(6, 9)                        
-                        select new Card() { Suit = suit, Index = index };
-
-            var group = cards.ToArray().OrderBy(a=>rnd.NextDouble()).ToArray().Select((c, i) => new { c, i }).GroupBy(a => a.i / 12);
-          
-
-            foreach (var g in group)
-            {
-                Players[g.Key].Cards = g.ToArray().OrderBy(a => a.c.Suit).ThenBy(a => a.c.Index).Select(a => a.c).ToArray();  
-            }
-        }
-
-        public void AddPlayer(PlayerInfo user)
-        {
-            var player = new Player(user,
-                 _manager.GetHubContext<GameHub, IGameContext>().Clients.Client(user.ConnectionId),
-                 _manager.GetHubContext<LobbyServices, ILobbyContext>().Clients.Client(user.ConnectionId)
-                );
-
-            player.Lobby.Connected(Id, GetPlayers().Select(k => k.Info).ToArray());
-
-            Players[CurrentPlayer++] = player;
-        }
-
-        public bool CheckUniquePlayer(PlayerInfo user)
-        {
-            return GetPlayers().Any(a => a?.Info == user);
-        }
-
-        public void Start()
-        {
-            ShuffleCards();
             var player = Players.First(a => a.Cards.Any(b => b.Suit == 3 && b.Index == 9));
+            player.AvailableCards = new[] {new Card {Suit = 3, Index = 9}};
+
             CurrentPlayer = Array.IndexOf(Players, player);
-            Players[CurrentPlayer].AvailableCards = new[] {new Card {Suit = 3, Index = 9}};
         }
+        
 
-        public bool isFull()
+        public void PutCardOnTheTable(Card card, Player currentPlayer)
         {
-            return Players.All(a => a != null);
-        }
+            Player nextPlayer;
+            var state = "putCard";
 
-        public Player[] GetPlayers()
-        { 
-            return Players.Where(p => p != null).ToArray();
-        }
-
-        public string[] GetPlayersConnectionId()
-        {
-            return GetPlayers().Select(p => p.ConnectionId).ToArray();
-        }
-
-        public void Connect(PlayerInfo user)
-        {
-            if (CheckUniquePlayer(user)) return;
-
-            foreach (var p in GetPlayers())
+            switch (state)
             {
-                p.Lobby.PlayerConnected(user);
+                case "putCard":
+                    PutCard(card, currentPlayer);
+                    nextPlayer = MoveTurnToNextPlayer();
+                    nextPlayer.AvailableCards = nextPlayer.Cards.Where(CanPutCard).ToArray();
+                    if (nextPlayer.AvailableCards.Any())
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                case "Skip":
+                    foreach (var p in Players)
+                    {
+                        p.Game.SkipTurn(nextPlayer.Id, 50);
+                    }
+                case ""
             }
 
-            AddPlayer(user);
-
-            if (isFull())
+            do
             {
-                Start();
+                
 
-                foreach (var p in Players)
+
+                
+                do
                 {
-                    p.Lobby.GameStart(GetPlayers().Select(k=>k.Info).ToArray(), p.Money, p.Cards, p.AvailableCards);
+                    
+
+                    if (nextPlayer.AvailableCards.Any())
+                    {
+                        
+                    }
+                } while (!nextPlayer.AvailableCards.Any());
+
+
+                if (nextPlayer.IsHuman)
+                {
+                    nextPlayer.Game.YourTurn(nextPlayer.AvailableCards);
                 }
+                else
+                {
+                    card = ComputerChooseCard(nextPlayer);
+                    currentPlayer = nextPlayer;
+                }
+
+            } while (!currentPlayer.IsHuman);
+        }
+
+        private void PutCard(Card card, Player currentPlayer)
+        {
+            foreach (var player in Players)
+            {
+                player.Game.PutCardOnTheTable(currentPlayer.Id, card);
             }
+            Table[card.Suit][card.Index] = true;
+            currentPlayer.RemoveCard(card);
+        }
+
+        private Card ComputerChooseCard(Player player)
+        {
+            return null;
+        }
+
+        private Player MoveTurnToNextPlayer()
+        {
+            CurrentPlayer = (CurrentPlayer + 1)%3;
+            return Players[CurrentPlayer];
+        }
+
+        private bool CanPutCard(Card card)
+        {
+            return card.Index == 9
+                   || card.Index > 6 && Table[card.Suit][card.Index - 1]
+                   || card.Index < 14 && Table[card.Suit][card.Index + 1];
+        }
+        public Player Player(User user)
+        {
+            return Players.First(a => a.Info == user);
         }
     }
 }

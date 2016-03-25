@@ -9,11 +9,11 @@ namespace Game.Services.Stores
 {
     public class UsersStore
     {
-        public static ConcurrentDictionary<string, PlayerInfo> players = new ConcurrentDictionary<string, PlayerInfo>();
+        static readonly ConcurrentDictionary<string, User> players = new ConcurrentDictionary<string, User>();
 
-        public PlayerInfo Register(string name, string connectionId)
+        public User Register(string name, string connectionId)
         {
-            var playerInfo = new PlayerInfo()
+            var playerInfo = new User()
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = name,
@@ -26,14 +26,11 @@ namespace Game.Services.Stores
             return playerInfo;
         }
 
-        public PlayerInfo this[string connectionId]
+        public User GetByConnectionId(string connectionId)
         {
-            get
-            {
-                PlayerInfo playerInfo = null;
-                players.TryGetValue(connectionId, out playerInfo);
-                return playerInfo;
-            }
+            User user = null;
+            players.TryGetValue(connectionId, out user);
+            return user;
         }
     }
 }
