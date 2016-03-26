@@ -54,6 +54,14 @@ module.exports = {
             '/api/*': {
                 target: 'http://localhost:30155',
                 secure: false
+            },
+            '/signin-vkontakte': {
+                target: 'http://localhost:30155',
+                secure: false
+            },
+            '/login': {
+                target: 'http://localhost:30155',
+                secure: false
             }
         },
         historyApiFallback:true

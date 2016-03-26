@@ -26,6 +26,9 @@ export class LobbyPage extends React.Component<ILobbyPageProps, { lobbyContext: 
                     <a href="javascript:void(0)" className="btn btn-blue" onClick={() => lobbyContext.connectToRandomGame() }> Connect to a random game</a>
                     <a href="javascript:void(0)" className="btn btn-blue" onClick={() => lobbyContext.createFriendGame() }>Create friend game</a>
                     <a href="javascript:void(0)" className="btn btn-blue" onClick={() => lobbyContext.playWithComputer() }>Play with a computer</a>
+                    <br/>
+                    <a href="/login?authscheme=Vk">Vk</a>
+                    
             </div>;
     }    
 

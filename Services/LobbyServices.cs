@@ -7,7 +7,7 @@ using Game.Model.Players;
 
 namespace Game.Services
 {
-    [HubName("Lobby")]
+    [HubName("Lobby")]    
     public class LobbyServices : Hub<ILobbyContext>
     {
         private readonly GameBuildersStore _gameBuildersStore;
