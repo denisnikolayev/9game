@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Game.Hubs;
-using Game.Hubs.Services.Store;
 using Game.Model;
 using Game.Services.Stores;
-using Microsoft.AspNet.SignalR.Infrastructure;
-using Game.Services.Model.Stubs;
+using Game.Model.Players;
 
 namespace Game.Services.Model
 {
@@ -15,7 +11,7 @@ namespace Game.Services.Model
     {
         public Guid GameId { get; set; }
 
-        private readonly IConnectionManager _manager;
+        Func<User, Player> _playerResolver;
         private readonly GamesStore _gameStore;
         
 
@@ -23,10 +19,10 @@ namespace Game.Services.Model
 
         private readonly object _lockObject = new Object();
 
-        public GameBuilder(IConnectionManager manager, GamesStore gameStore)
+        public GameBuilder(Func<User, Player> playerResolver, GamesStore gameStore)
         {
             GameId = Guid.NewGuid();
-            _manager = manager;
+            _playerResolver = playerResolver;
             _gameStore = gameStore;
         }
 
@@ -63,21 +59,8 @@ namespace Game.Services.Model
 
         private void AddPlayer(User user)
         {
-            Player player;
-            if (user.IsHuman)
-            {
-                player = new Player(user,
-                     _manager.GetHubContext<GameService, IGameContext>().Clients.Client(user.ConnectionId),
-                     _manager.GetHubContext<LobbyServices, ILobbyContext>().Clients.Client(user.ConnectionId)
-                    );
-
-                player.Lobby.Connected(GameId, Players.Select(k => k.User).ToArray());
-            }
-            else
-            {
-                player = new Player(user, new GameContextStub(), new LobbyContextStub());               
-            }
-
+            var player = _playerResolver(user);
+            player.Lobby.Connected(GameId, Players.Select(k => k.User).ToArray());
             Players.Add(player);
         }
        

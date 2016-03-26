@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Game.Model;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
-using Microsoft.Extensions.Logging;
-using System.Collections.Concurrent;
-using Game.Hubs;
-using Game.Hubs.Services;
-using Game.Hubs.Services.Store;
 using Game.Services.Stores;
-using Microsoft.AspNet.SignalR.Infrastructure;
+using Game.Services.Clients;
+using Game.Model.Players;
 
 namespace Game.Services
 {

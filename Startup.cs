@@ -5,10 +5,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using Game.Hubs.Services;
-using Game.Hubs.Services.Store;
 using Game.Services.Stores;
 using Game.Services.Model;
+using Autofac;
+using System;
+using Autofac.Extensions.DependencyInjection;
+using Game.Services;
 
 namespace Game
 {
@@ -26,7 +28,7 @@ namespace Game
         public IConfigurationRoot Configuration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
             services.AddMvc();
@@ -35,12 +37,15 @@ namespace Game
                 options.Hubs.EnableDetailedErrors = true;                
                 options.Hubs.EnableJavaScriptProxies = false;
             });
-
             services.AddCors();
-            services.AddSingleton<GamesStore>();
-            services.AddSingleton<UsersStore>();
-            services.AddSingleton<GameBuildersStore>();
-            services.AddSingleton<ComputerBrain>();
+
+            // Init autofac
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.Populate(services);
+            containerBuilder.RegisterModule<ConfigurationModule>();
+            var container = containerBuilder.Build();
+
+            return container.Resolve<IServiceProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

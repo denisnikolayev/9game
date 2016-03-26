@@ -4,25 +4,23 @@ using System.Linq;
 using Game.Model;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using Game.Services.Model;
+using Game.Model.Players;
 
 namespace Game.Services.Stores
 {
     public class GamesStore
-    {
-        private readonly IConnectionManager _manager;
-        private readonly ComputerBrain _computerBrain;
+    {  
         ConcurrentDictionary<Guid, GameContext> gameContextsStore = new ConcurrentDictionary<Guid, GameContext>();
-       
+        Func<Player[], Guid, GameContext> _gameContextResolver;
 
-        public GamesStore(IConnectionManager manager, ComputerBrain computerBrain)
+        public GamesStore(Func<Player[], Guid, GameContext> gameContextResolver)
         {
-            _manager = manager;
-            _computerBrain = computerBrain;
+            _gameContextResolver = gameContextResolver;
         }
 
         public GameContext Create(Player[] players, Guid gameId)
         {
-            var game = new GameContext(players, gameId, _computerBrain);
+            var game = _gameContextResolver(players, gameId);
             gameContextsStore.TryAdd(game.Id, game);
 
             return game;

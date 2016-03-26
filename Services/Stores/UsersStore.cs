@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Game.Model;
+using Game.Model.Players;
 
 namespace Game.Services.Stores
 {
@@ -11,6 +12,7 @@ namespace Game.Services.Stores
     {
         readonly ConcurrentDictionary<string, User> players = new ConcurrentDictionary<string, User>();
         Random _random = new Random();
+        
 
         public User Register(string name, string connectionId)
         {

@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Game.Hubs;
-using Game.Hubs.Services.Store;
 using Game.Model;
 using Game.Services.Stores;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Extensions.Logging;
+using Game.Services.Clients;
 
 namespace Game.Services
 {

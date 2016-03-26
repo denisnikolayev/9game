@@ -1,10 +1,11 @@
 ﻿using Game.Model;
+using Game.Model.Players;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Game.Hubs
+namespace Game.Services.Clients
 {
     public interface ILobbyContext
     {

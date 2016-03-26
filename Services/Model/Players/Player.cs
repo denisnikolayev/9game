@@ -1,8 +1,8 @@
-﻿using Game.Hubs;
+﻿using Game.Services.Clients;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using System.Linq;
 
-namespace Game.Model
+namespace Game.Model.Players
 {
     public class Player
     {
@@ -34,9 +34,9 @@ namespace Game.Model
         public ILobbyContext Lobby { get; private set; }
         public bool IsHuman => User.IsHuman;
 
-        public Player(User info, IGameContext game, ILobbyContext lobby)
+        public Player(User user, IGameContext game, ILobbyContext lobby)
         {
-            this.User = info;
+            this.User = user;
             this.Game = game;
             this.Lobby = lobby;
         }
@@ -44,6 +44,11 @@ namespace Game.Model
         public void RemoveCard(Card card)
         {
             Cards = Cards.Except(Cards.Where(a => a.Suit == card.Suit && a.Index == card.Index)).ToArray();
+        }
+
+        public bool[] CardsInLine(int suit)
+        {
+            return Enumerable.Range(0, 15).Select(index=>new Card(suit, index)).Select(Cards.Contains).ToArray();
         }
 
         public static implicit operator User(Player player)

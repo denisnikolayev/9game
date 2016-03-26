@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Game.Model.Players;
+using System;
 using System.Linq;
-using System.Threading.Tasks;
-using Game.Hubs;
-using Game.Services;
-using Microsoft.AspNet.SignalR.Infrastructure;
-using Game.Services.Model;
 
 namespace Game.Model
 {
@@ -20,9 +15,9 @@ namespace Game.Model
         public Player CurrentPlayer => Players[CurrentPlayerIndex];
 
         public readonly object _lockObject = new Object();
-        private readonly ComputerBrain _computerBrain;
+        private readonly Func<ComputerBrain> _computerBrain;
 
-        public GameContext(Player[] players, Guid gameId, ComputerBrain computerBrain)
+        public GameContext(Player[] players, Guid gameId, Func<ComputerBrain> computerBrain)
         {
             Table = Enumerable.Range(0, 4).Select(suit => new bool[15]).ToArray();
             Id = gameId;
@@ -102,7 +97,7 @@ namespace Game.Model
 
 
         ComputerChoosingCard:
-            card = _computerBrain.ChooseCard(Table, player);
+            card = _computerBrain().ChooseCard(Table, player);
             goto PuttingCard;
 
 

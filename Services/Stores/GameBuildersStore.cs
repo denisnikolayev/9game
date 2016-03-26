@@ -1,31 +1,28 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Linq;
-using Game.Model;
 using Game.Services.Model;
-using Game.Services.Stores;
-using Microsoft.AspNet.SignalR.Infrastructure;
 
-namespace Game.Hubs.Services.Store
+namespace Game.Services.Stores
 {
     public class GameBuildersStore
-    {
-        private readonly IConnectionManager _manager;
+    {        
         private readonly GamesStore _gamesStore;        
         ConcurrentDictionary<Guid, GameBuilder> _gameBuildersStore = new ConcurrentDictionary<Guid, GameBuilder>();
+        Func<GameBuilder> _gameBuilderResolver;
         
+
         public GameBuilder LastUnStarted;
         public object LockForLastUnStarted = new object();
 
-        public GameBuildersStore(IConnectionManager manager, GamesStore gamesStore)
+        public GameBuildersStore(Func<GameBuilder> gameBuilderResolver, GamesStore gamesStore)
         {
-            _manager = manager;
+            _gameBuilderResolver = gameBuilderResolver; 
             _gamesStore = gamesStore;
         }
 
         public GameBuilder Create()
         {
-            var game = new GameBuilder(_manager, _gamesStore);
+            var game = _gameBuilderResolver();
             _gameBuildersStore.TryAdd(game.GameId, game);
             return game;
         }
