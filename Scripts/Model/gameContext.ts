@@ -1,6 +1,6 @@
 ﻿import {Card} from "./card";
 import {suits, indexes, lengthOfLine} from "./consts";
-import {range, subscribe, unsubscribe} from "../utils/helpers";
+import {range, subscribe} from "../utils/helpers";
 import 'ms-signalr-client';
 import {GameResult} from "./gameResult";
 

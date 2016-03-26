@@ -24,7 +24,8 @@ namespace Game.Services
             builder.RegisterType<GameBuilder>();
             builder.RegisterType<LobbyContextStub>();
             builder.RegisterType<GameContextStub>();
-
+            builder.RegisterType<GameContext>();
+            builder.RegisterType<GameResult>();
 
             builder.Register<IGameContext>((c, p) =>
             {
@@ -60,16 +61,6 @@ namespace Game.Services
                 var lobbyContextResolver = c.Resolve<Func<string, ILobbyContext>>();
 
                 return new Player(user, gameContextResolver(user.ConnectionId), lobbyContextResolver(user.ConnectionId));
-            });
-
-
-            builder.Register<GameContext>((c, p) =>
-            {
-                var gameId = p.TypedAs<Guid>();
-                var players = p.TypedAs<Player[]>();
-                var computerBrain = c.Resolve<Func<ComputerBrain>>();
-
-                return new GameContext(players, gameId, computerBrain);
             });
         }
     }

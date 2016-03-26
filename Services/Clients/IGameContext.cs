@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Game.Model;
+using Game.Services.Model;
 
 namespace Game.Services.Clients
 {
@@ -14,5 +15,7 @@ namespace Game.Services.Clients
         void YourTurn(Card[] cards);
 
         void SkipTurn(string playerId, int lostMoney);
+
+        void Finish(GameResult gameResult);
     }
 }

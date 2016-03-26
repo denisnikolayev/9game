@@ -39,7 +39,3 @@ export function *getServerListMethods(obj:any): Iterable<{ name: string, method:
 export function subscribe<T>(obj: T, proxy:SignalR.Hub.Proxy) {
     for (var methodInfo of getServerListMethods(obj)) proxy.on(methodInfo.name, methodInfo.method);   
 }
-
-export function unsubscribe<T>(obj: T, proxy: SignalR.Hub.Proxy) {
-    for (var methodInfo of getServerListMethods(obj)) proxy.off(methodInfo.name, methodInfo.method);
-}

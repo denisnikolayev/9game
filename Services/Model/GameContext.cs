@@ -1,4 +1,5 @@
 ﻿using Game.Model.Players;
+using Game.Services.Model;
 using System;
 using System.Linq;
 
@@ -16,13 +17,15 @@ namespace Game.Model
 
         public readonly object _lockObject = new Object();
         private readonly Func<ComputerBrain> _computerBrain;
+        private readonly Func<GameResult> _gameResultResolve;
 
-        public GameContext(Player[] players, Guid gameId, Func<ComputerBrain> computerBrain)
+        public GameContext(Player[] players, Guid gameId, Func<ComputerBrain> computerBrain, Func<GameResult> gameResultResolve)
         {
             Table = Enumerable.Range(0, 4).Select(suit => new bool[15]).ToArray();
             Id = gameId;
             Players = players;
             _computerBrain = computerBrain;
+            _gameResultResolve = gameResultResolve;
 
             SetFirstPlayer();
         }
@@ -39,10 +42,11 @@ namespace Game.Model
 
         public void PutCardOnTheTable(Player player, Card card)
         {
-        // Implementation of the state machine
-        // In this case it is much clearly for understanding
-        // https://raw.githubusercontent.com/denisnikolayev/9game/master/Docs/StateMachine.png
+            // Implementation of the state machine
+            // In this case it is much clearly for understanding
+            // https://raw.githubusercontent.com/denisnikolayev/9game/master/Docs/StateMachine.png
 
+            
             if (!player.IsHuman)
             {
                 goto ComputerChoosingCard;
@@ -106,7 +110,20 @@ namespace Game.Model
             return;
 
         Finish:
-            //TODO: finish
+            player.Money += BankMoney;
+
+            var gameResult = _gameResultResolve();
+            gameResult.BankMoney = BankMoney;
+            gameResult.Winner = player;
+            gameResult.OtherUsers = Players.Except(new[] { player }).Select(p => p.User).ToArray();
+
+            foreach (var p in Players)
+            {
+                p.Game.Finish(gameResult);
+            }
+
+            //TODO: Kill game
+            //TODO: Save accounts
             return;
         }
 

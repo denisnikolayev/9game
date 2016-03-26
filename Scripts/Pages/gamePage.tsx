@@ -15,7 +15,7 @@ export class GamePage extends React.Component<{}, { gameContext: GameContext }> 
     }       
     
      componentWillUnmount() {
-        Container.gameContext.onChange = null;
+         Container.gameContext.onChange = () => { };
     }   
      
     onPlayerCardClick(card: Card) {

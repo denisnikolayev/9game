@@ -4,7 +4,7 @@ import {Container} from "../model/container";
 
 interface ILobbyPageProps {
     location:{query:{gameId?:string}}
-    }
+}
 
 export class LobbyPage extends React.Component<ILobbyPageProps, { lobbyContext: LobbyContext}> {
     constructor(props:ILobbyPageProps) {
@@ -17,15 +17,15 @@ export class LobbyPage extends React.Component<ILobbyPageProps, { lobbyContext: 
     }   
 
     componentWillUnmount() {
-        Container.lobbyContext.onChange = null;
+        Container.lobbyContext.onChange = () => { };
     }
 
     stateChooseGame() {
         let {lobbyContext} = this.state;
         return <div>
-                    <button onClick={() => lobbyContext.connectToRandomGame() }> Connect to a random game</button>
-                    <button onClick={() => lobbyContext.createFriendGame() }>Create friend game</button>
-                    <button onClick={() => lobbyContext.playWithComputer() }>Play with a computer</button>
+                    <a href="javascript:void(0)" className="btn btn-blue" onClick={() => lobbyContext.connectToRandomGame() }> Connect to a random game</a>
+                    <a href="javascript:void(0)" className="btn btn-blue" onClick={() => lobbyContext.createFriendGame() }>Create friend game</a>
+                    <a href="javascript:void(0)" className="btn btn-blue" onClick={() => lobbyContext.playWithComputer() }>Play with a computer</a>
             </div>;
     }    
 
@@ -45,7 +45,7 @@ export class LobbyPage extends React.Component<ILobbyPageProps, { lobbyContext: 
         const {lobbyContext} = this.state; 
 
         return (
-            <div>
+            <div className="lobby">
                 <h1>CurrentPlayer: {lobbyContext.currentPlayer.name}</h1>
                 {this.props.location.query && this.props.location.query.gameId?this.stateWaitGamers():this.stateChooseGame()}
                 <div>
