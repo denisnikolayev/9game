@@ -1,5 +1,6 @@
 ﻿using Game.Model.Players;
 using Game.Services.Model;
+using Game.Services.Stores;
 using System;
 using System.Linq;
 
@@ -18,14 +19,25 @@ namespace Game.Model
         public readonly object _lockObject = new Object();
         private readonly Func<ComputerBrain> _computerBrain;
         private readonly Func<GameResult> _gameResultResolve;
+        private readonly IUsersStore _usersStore;
 
-        public GameContext(Player[] players, Guid gameId, Func<ComputerBrain> computerBrain, Func<GameResult> gameResultResolve)
+        public GameContext(Player[] players, Guid gameId, Func<ComputerBrain> computerBrain, Func<GameResult> gameResultResolve, IUsersStore usersStore)
         {
             Table = Enumerable.Range(0, 4).Select(suit => new bool[15]).ToArray();
             Id = gameId;
             Players = players;
             _computerBrain = computerBrain;
             _gameResultResolve = gameResultResolve;
+            _usersStore = usersStore;
+            BankMoney = 150;
+
+            foreach (var p in Players)
+            {
+                p.Money -= 50;
+
+                p.Lobby.RefreshMoney(p.Money);
+                _usersStore.UpdateMoney(p);
+            }
 
             SetFirstPlayer();
         }
@@ -97,6 +109,8 @@ namespace Game.Model
             {
                 p.Game.SkipTurn(player.Id, 50);
             }
+            _usersStore.UpdateMoney(player);
+
             goto MovingToNextPlayer;
 
 
@@ -121,10 +135,11 @@ namespace Game.Model
             {
                 p.Game.Finish(gameResult);
                 p.Lobby.RefreshMoney(p.Money);
+                _usersStore.UpdateMoney(p);
             }
 
             //TODO: Kill game
-            //TODO: Save accounts
+            
             return;
         }
 

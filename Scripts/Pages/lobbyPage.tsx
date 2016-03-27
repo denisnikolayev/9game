@@ -27,6 +27,7 @@ export class LobbyPage extends React.Component<ILobbyPageProps, { lobbyContext: 
         let {lobbyContext} = this.state;
         return <div>
                     <div className="row">
+                        <b>If you want to save your money, authorize by -> </b>
                         <a href="/login?authscheme=Vk" className="btn btn-blue" >Vk</a>
                         <a href="/login?authscheme=Facebook" className="btn btn-blue" >Facebook</a>
                     </div>

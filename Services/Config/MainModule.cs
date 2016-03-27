@@ -16,9 +16,10 @@ namespace Game.Services
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<GamesStore>().SingleInstance();
-            builder.RegisterType<UsersStore>().SingleInstance();
-            builder.RegisterType<GameBuildersStore>().SingleInstance();
+            builder.RegisterType<GamesCache>().SingleInstance();
+           
+            builder.RegisterType<GameBuildersCache>().SingleInstance();
+            builder.RegisterType<UsersCache>().SingleInstance();
 
             builder.RegisterType<ComputerBrain>();
             builder.RegisterType<GameBuilder>();
@@ -57,10 +58,11 @@ namespace Game.Services
             builder.Register<Player>((c, p) =>
             {
                 var user = p.TypedAs<User>();
+                var connectionId = p.TypedAs<string>();
                 var gameContextResolver = c.Resolve<Func<string, IGameContext>>();
                 var lobbyContextResolver = c.Resolve<Func<string, ILobbyContext>>();
 
-                return new Player(user, gameContextResolver(user.ConnectionId), lobbyContextResolver(user.ConnectionId));
+                return new Player(user, gameContextResolver(connectionId), lobbyContextResolver(connectionId));
             });
         }
     }

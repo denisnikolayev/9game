@@ -20,6 +20,7 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
 using System.Security.Claims;
 using System.Linq;
+using Game.Services.Config;
 
 namespace Game
 {
@@ -48,11 +49,15 @@ namespace Game
             });
             services.AddCors();
             services.AddAuthentication(options=>options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+            services.Configure<MongoDbConfig>(Configuration.GetSection("MongoDbConfig"));
 
             // Init autofac
             var containerBuilder = new ContainerBuilder();
             containerBuilder.Populate(services);
+
             containerBuilder.RegisterModule<ConfigurationModule>();
+            containerBuilder.RegisterModule<MongoDbModule>();
+
             var container = containerBuilder.Build();
 
             return container.Resolve<IServiceProvider>();

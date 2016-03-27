@@ -10,34 +10,32 @@ namespace Game.Services.Model
     public class GameBuilder
     {
         public Guid GameId { get; set; }
-
-        Func<User, Player> _playerResolver;
-        private readonly GamesStore _gameStore;
+        
+        private readonly GamesCache _gameStore;
         
 
         public List<Player> Players { get; set; } = new List<Player>();
 
         private readonly object _lockObject = new Object();
 
-        public GameBuilder(Func<User, Player> playerResolver, GamesStore gameStore)
+        public GameBuilder(GamesCache gameStore)
         {
-            GameId = Guid.NewGuid();
-            _playerResolver = playerResolver;
+            GameId = Guid.NewGuid();           
             _gameStore = gameStore;
         }
 
-        public void Connect(User user)
+        public void Connect(Player player)
         {
             lock (_lockObject)
             {
-                if (CheckUniquePlayer(user)) return;
+                if (!CheckUniquePlayer(player)) return;
 
                 foreach (var p in Players)
                 {
-                    p.Lobby.PlayerConnected(user);
+                    p.Lobby.PlayerConnected(player.User);
                 }
 
-                AddPlayer(user);
+                AddPlayer(player);
 
                 if (IsFull())
                 {
@@ -46,7 +44,7 @@ namespace Game.Services.Model
 
                     foreach (var p in Players)
                     {
-                        p.Lobby.GameStart(Players.Select(k => k.User).ToArray(), p.Money, p.Cards, p.AvailableCards);
+                        p.Lobby.GameStart(Players.Select(k => k.User).ToArray(), 150, p.Cards, p.AvailableCards);
                     }
                     
                     if (!game.CurrentPlayer.IsHuman)
@@ -57,17 +55,16 @@ namespace Game.Services.Model
             }
         }
 
-        private void AddPlayer(User user)
-        {
-            var player = _playerResolver(user);
+        private void AddPlayer(Player player)
+        {            
             player.Lobby.Connected(GameId, Players.Select(k => k.User).ToArray());
             Players.Add(player);
         }
        
 
-        private bool CheckUniquePlayer(User user)
+        private bool CheckUniquePlayer(Player player)
         {
-            return Players.Any(a => a?.User == user);
+            return !Players.Contains(player);
         }
 
         private GameContext StartGame()

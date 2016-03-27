@@ -19,9 +19,7 @@ namespace Game.Model.Players
 
         [JsonProperty("money")]
         public int Money { get; set; }
-
-        [JsonProperty("connectionId")]
-        public string ConnectionId { get; set; }
+        
 
         [JsonProperty("isHuman")]
         public bool IsHuman { get; set; }

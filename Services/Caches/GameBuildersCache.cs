@@ -4,9 +4,8 @@ using Game.Services.Model;
 
 namespace Game.Services.Stores
 {
-    public class GameBuildersStore
-    {        
-        private readonly GamesStore _gamesStore;        
+    public class GameBuildersCache
+    {              
         ConcurrentDictionary<Guid, GameBuilder> _gameBuildersStore = new ConcurrentDictionary<Guid, GameBuilder>();
         Func<GameBuilder> _gameBuilderResolver;
         
@@ -14,10 +13,9 @@ namespace Game.Services.Stores
         public GameBuilder LastUnStarted;
         public object LockForLastUnStarted = new object();
 
-        public GameBuildersStore(Func<GameBuilder> gameBuilderResolver, GamesStore gamesStore)
+        public GameBuildersCache(Func<GameBuilder> gameBuilderResolver)
         {
             _gameBuilderResolver = gameBuilderResolver; 
-            _gamesStore = gamesStore;
         }
 
         public GameBuilder Create()

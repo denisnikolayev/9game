@@ -8,12 +8,12 @@ using Game.Model.Players;
 
 namespace Game.Services.Stores
 {
-    public class GamesStore
+    public class GamesCache
     {  
         ConcurrentDictionary<Guid, GameContext> gameContextsStore = new ConcurrentDictionary<Guid, GameContext>();
         Func<Player[], Guid, GameContext> _gameContextResolver;
 
-        public GamesStore(Func<Player[], Guid, GameContext> gameContextResolver)
+        public GamesCache(Func<Player[], Guid, GameContext> gameContextResolver)
         {
             _gameContextResolver = gameContextResolver;
         }
@@ -26,14 +26,17 @@ namespace Game.Services.Stores
             return game;
         }
 
-        public GameContext Load(Guid gameId)
+        public GameContext this[Guid gameId]
         {
-            GameContext game;
-            if (!gameContextsStore.TryGetValue(gameId, out game))
+            get
             {
-                throw new Exception($"Can't find gameId {gameId.ToString()}");
+                GameContext game;
+                if (!gameContextsStore.TryGetValue(gameId, out game))
+                {
+                    throw new Exception($"Can't find gameId {gameId.ToString()}");
+                }
+                return game;
             }
-            return game;
         }
     }
 }

@@ -5,21 +5,26 @@ using Game.Services.Stores;
 using Game.Services.Clients;
 using Game.Model.Players;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Game.Services
 {
     [HubName("Lobby")]    
     public class LobbyServices : Hub<ILobbyContext>
     {
-        private readonly GameBuildersStore _gameBuildersStore;
-        private readonly UsersStore _usersStore;
-        
-        private User User => _usersStore.GetByConnectionId(Context.ConnectionId);
+        private readonly GameBuildersCache _gameBuildersCache;
+        private readonly IUsersStore _usersStore;
+        private readonly UsersCache _usersCache;
+        private readonly Func<User, string, Player> _playerResolver;
 
-        public LobbyServices(UsersStore usersStore, GameBuildersStore gameBuildersStore)
+        private User User => _usersCache[Context.ConnectionId];
+
+        public LobbyServices(IUsersStore usersStore, GameBuildersCache gameBuildersCache, UsersCache usersCache, Func<User, string, Player> playerResolver)
         {
-            _gameBuildersStore = gameBuildersStore;
+            _gameBuildersCache = gameBuildersCache;
             _usersStore = usersStore;
+            _usersCache = usersCache;
+            _playerResolver = playerResolver;
         }
 
 
@@ -28,55 +33,62 @@ namespace Game.Services
             User user;
             if (Context.User.Identity.IsAuthenticated)
             {
-                user = _usersStore.Register(Context.User as ClaimsPrincipal, Context.ConnectionId);                
+                user = _usersStore.RegisterOrLoad(Context.User as ClaimsPrincipal);                
             }
             else
             {
                 user = _usersStore.RegisterAsGuest(Context.ConnectionId);
             }
-
+            _usersCache[Context.ConnectionId] = user;
             Clients.Caller.Registered(user);
         }
         
 
         public void ConnectToGame(Guid gameId)
         {
-            _gameBuildersStore
+            _gameBuildersCache
                 .Load(gameId)
-                .Connect(User);
+                .Connect(_playerResolver(User, Context.ConnectionId));
         }       
 
 
         public void ConnectToRandomGame()
         {
-            lock (_gameBuildersStore.LockForLastUnStarted)
+            lock (_gameBuildersCache.LockForLastUnStarted)
             {
-                var last = _gameBuildersStore.LastUnStarted;
+                var last = _gameBuildersCache.LastUnStarted;
 
                 if (last == null || last.IsFull())
                 {
-                    last = _gameBuildersStore.Create();
+                    last = _gameBuildersCache.Create();
                 }
-                last.Connect(User);
+                last.Connect(_playerResolver(User, Context.ConnectionId));
 
-                _gameBuildersStore.LastUnStarted = last;                
+                _gameBuildersCache.LastUnStarted = last;                
             }
         }
 
 
         public void CreateFriendGame()
         {
-            _gameBuildersStore
+            _gameBuildersCache
                 .Create()
-                .Connect(User);
+                .Connect(_playerResolver(User, Context.ConnectionId));
         }
 
         public void PlayWithComputer()
         {
-            var game = _gameBuildersStore.Create();
-            game.Connect(User);
-            game.Connect(_usersStore.CreateComputer());
-            game.Connect(_usersStore.CreateComputer());
+            var game = _gameBuildersCache.Create();
+            game.Connect(_playerResolver(User, Context.ConnectionId));
+            game.Connect(_playerResolver(_usersStore.CreateComputer(), null));
+            game.Connect(_playerResolver(_usersStore.CreateComputer(), null));
+        }
+
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            _usersCache[Context.ConnectionId] = null;
+
+            return base.OnDisconnected(stopCalled);
         }
     }
 }

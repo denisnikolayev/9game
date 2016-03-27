@@ -8,27 +8,31 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Extensions.Logging;
 using Game.Services.Clients;
+using Game.Model.Players;
 
 namespace Game.Services
 {
     [HubName("Game")]
     public class GameService : Hub<IGameContext>
     {
-        private readonly GamesStore _gameStore;
-        private readonly UsersStore _userStore;
+        private readonly GamesCache _gameCache;
+        private readonly IUsersStore _userStore;
+        private readonly UsersCache _usersCache;
 
-        public GameService(GamesStore gameStore, UsersStore userStore)
+        private User User => _usersCache[Context.ConnectionId];
+
+        public GameService(GamesCache gameCache, IUsersStore userStore, UsersCache usersCache)
         {
-            _gameStore = gameStore;
+            _gameCache = gameCache;
             _userStore = userStore;
+            _usersCache = usersCache;
         }
 
         public void PutCardOnTheTable(Guid gameId, Card card)
-        {
-            var user = _userStore.GetByConnectionId(Context.ConnectionId);
-            var game = _gameStore.Load(gameId);
+        {            
+            var game = _gameCache[gameId];
 
-            var player = game.Player(user);
+            var player = game.Player(User);
 
             if (game.ValidateStep(player, card))
             {
