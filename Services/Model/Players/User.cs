@@ -26,6 +26,7 @@ namespace Game.Model.Players
         [JsonProperty("isHuman")]
         public bool IsHuman { get; set; }
 
+
         public override int GetHashCode() => this.Id.GetHashCode();       
         public override bool Equals(object other) =>  this?.Id == (other as User)?.Id;
         public static bool operator ==(User a, User b) => Object.ReferenceEquals(a, b) || a?.Equals(b) == true;

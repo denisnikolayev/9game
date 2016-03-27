@@ -92,7 +92,7 @@ namespace Game
 
                         string userInfoLink = "https://api.vk.com/method/" + "users.get.json" +
                                       "?user_ids=" + Uri.EscapeDataString(userId) +
-                                      "&fields=" + Uri.EscapeDataString("nickname,screen_name,photo_50,photo_medium");
+                                      "&fields=" + Uri.EscapeDataString("photo_medium"); //nickname,screen_name
 
                         var request = new HttpRequestMessage(HttpMethod.Get, userInfoLink);
                         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
@@ -102,18 +102,35 @@ namespace Game
                         response.EnsureSuccessStatusCode();
 
                         var user = JObject.Parse(await response.Content.ReadAsStringAsync()).Property("response").First().First();
+                       
+                        context.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Value<string>("uid")));
+                        
+                        var firstName = user.Value<string>("first_name");
+                        var lastName = user.Value<string>("last_name");
 
-                        var identifier = user.Value<string>("uid");
-                        if (!string.IsNullOrEmpty(identifier))
-                        {
-                            context.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, identifier));
-                        }
+                        context.Identity.AddClaim(new Claim(ClaimTypes.Name, firstName + " " + lastName));
+
+                        context.Identity.AddClaim(new Claim("Photo", user.Value<string>("photo_medium")));
                     },
                      OnTicketReceived = (ticket) =>
                      {
                          return Task.FromResult(0);
                      }
                 }
+            });
+
+            app.UseFacebookAuthentication(options=>
+            {                     
+                options.AppId = "1525947324376076";
+                options.AppSecret = "c5261adae2e46d893e6f77f6a41db67f";
+                options.Events = new OAuthEvents() {                    
+                    OnCreatingTicket = (context) =>
+                    {
+                        var id = context.Identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+                        context.Identity.AddClaim(new Claim("Photo", $"https://graph.facebook.com/{id}/picture?type=normal"));
+                        return Task.FromResult(0);
+                    }
+                };
             });
 
             app.Map("/login", sign =>

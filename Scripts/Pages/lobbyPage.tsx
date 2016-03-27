@@ -1,6 +1,7 @@
 ﻿import * as React from "react";
 import {LobbyContext} from "../model/lobbyContext";
 import {Container} from "../model/container";
+import {PlayerInfo} from "../model/players/playerInfo";
 
 interface ILobbyPageProps {
     location:{query:{gameId?:string}}
@@ -20,20 +21,31 @@ export class LobbyPage extends React.Component<ILobbyPageProps, { lobbyContext: 
         Container.lobbyContext.onChange = () => { };
     }
 
+    showUser(user:PlayerInfo) {
+        return (
+            <div className="user">
+                    <img src={user.avatarUrl} style={{ float: "left" }} />
+                    <div>{user.name}</div>
+                    <div>{user.money}</div>
+                    <div style={{ clear: "left" }}/>
+                </div>
+                )
+    }
+
     stateChooseGame() {
         let {lobbyContext} = this.state;
-        return <div>
+        return <div>                    
                     <a href="javascript:void(0)" className="btn btn-blue" onClick={() => lobbyContext.connectToRandomGame() }> Connect to a random game</a>
                     <a href="javascript:void(0)" className="btn btn-blue" onClick={() => lobbyContext.createFriendGame() }>Create friend game</a>
                     <a href="javascript:void(0)" className="btn btn-blue" onClick={() => lobbyContext.playWithComputer() }>Play with a computer</a>
-                    <br/>
-                    <a href="/login?authscheme=Vk">Vk</a>
-                    
+                    <br/><br/>
+                    <a href="/login?authscheme=Vk" className="btn btn-blue" >Vk</a>
+                    <a href="/login?authscheme=Facebook" className="btn btn-blue" >Facebook</a>
             </div>;
     }    
 
     stateWaitGamers() {       
-        var connectedUsers = Container.lobbyContext.connectedPlayers.map(playerInfo=> <div key={playerInfo.id}>{playerInfo.name}</div>);
+        var connectedUsers = Container.lobbyContext.connectedPlayers.map(playerInfo=> <div key={playerInfo.id}>{this.showUser(playerInfo)}</div>);
         return (
             <div> 
                  <div>Waiting</div>
@@ -49,7 +61,7 @@ export class LobbyPage extends React.Component<ILobbyPageProps, { lobbyContext: 
 
         return (
             <div className="lobby">
-                <h1>CurrentPlayer: {lobbyContext.currentPlayer.name}</h1>
+                {this.showUser(lobbyContext.currentPlayer)}
                 {this.props.location.query && this.props.location.query.gameId?this.stateWaitGamers():this.stateChooseGame()}
                 <div>
                     //TODO: chat

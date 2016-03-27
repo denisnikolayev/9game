@@ -4,6 +4,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 using Game.Services.Stores;
 using Game.Services.Clients;
 using Game.Model.Players;
+using System.Security.Claims;
 
 namespace Game.Services
 {
@@ -22,10 +23,19 @@ namespace Game.Services
         }
 
 
-        public void RegisterUser(string name)
+        public void RegisterUser()
         {
-            var player = _usersStore.Register(name, Context.ConnectionId);
-            Clients.Caller.Registered(player);
+            User user;
+            if (Context.User.Identity.IsAuthenticated)
+            {
+                user = _usersStore.Register(Context.User as ClaimsPrincipal, Context.ConnectionId);                
+            }
+            else
+            {
+                user = _usersStore.RegisterAsGuest(Context.ConnectionId);
+            }
+
+            Clients.Caller.Registered(user);
         }
 
         public void ConnectToGame(Guid gameId)

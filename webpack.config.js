@@ -52,16 +52,13 @@ module.exports = {
         port: 3002,
         proxy: {
             '/api/*': {
-                target: 'http://localhost:30155',
-                secure: false
+                target: 'http://localhost:30155'
             },
-            '/signin-vkontakte': {
-                target: 'http://localhost:30155',
-                secure: false
+            '/signin-*': {
+                target: 'http://localhost:30155'
             },
             '/login': {
-                target: 'http://localhost:30155',
-                secure: false
+                target: 'http://localhost:30155'
             }
         },
         historyApiFallback:true

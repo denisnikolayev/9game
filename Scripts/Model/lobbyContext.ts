@@ -2,7 +2,7 @@
 import {PlayerInfo} from "./players/playerInfo";
 import {Card} from "./card";
 import {GameContext} from "./gameContext";
-import {subscribe, getRandom} from "../utils/helpers";
+import {subscribe} from "../utils/helpers";
 import {Player} from "./players/player";
 
 export class LobbyContext {
@@ -59,7 +59,7 @@ export class LobbyContext {
     registerUser(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             this.onRegisteredResolve = resolve;
-            this.lobbyServer.invoke("RegisterUser", getRandom(0, 10000));
+            this.lobbyServer.invoke("RegisterUser");
         });
     }  
 
