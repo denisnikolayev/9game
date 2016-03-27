@@ -1,4 +1,4 @@
-﻿export class PlayerInfo {
+﻿export class User {
     name: string;
     id: string;
     avatarUrl: string;

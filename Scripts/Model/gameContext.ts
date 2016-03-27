@@ -7,7 +7,7 @@ import {GameResult} from "./gameResult";
 import {Opponent} from "./players/opponent";
 import {Player} from "./players/player";
 import {IPlayer} from "./players/iplayer";
-import {PlayerInfo} from "./players/playerInfo";
+import {User} from "./players/user";
 
 
 export class GameContext {
@@ -35,7 +35,7 @@ export class GameContext {
         subscribe(this, this.server);
     }
 
-    beginGame(gameId:string, players: PlayerInfo[], bankMoney: number, player: Player) {
+    beginGame(gameId:string, players: User[], bankMoney: number, player: Player) {
         this.cardsWereOpened = suits.map(i => range(lengthOfLine, false));
 
         this.player = player;
@@ -68,8 +68,8 @@ export class GameContext {
         this.onChange();
     }
 
-    serverDisconnect(playerId, newPlayerInfo: PlayerInfo) {
-        this.players[playerId].info = newPlayerInfo;
+    serverDisconnect(playerId, newUser: User) {
+        this.players[playerId].info = newUser;
         this.onChange();
     }
 
@@ -84,7 +84,7 @@ export class GameContext {
     }
 
 
-    private setCorrectOpponents(players: PlayerInfo[]) {
+    private setCorrectOpponents(players: User[]) {
         var ourIndex = players.findIndex(p=> p.id == this.player.id);
         this.leftOpponent = new Opponent(players[(ourIndex + 1) % players.length]);
         this.rightOpponent = new Opponent(players[(ourIndex + 2) % players.length]);

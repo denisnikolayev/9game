@@ -2,10 +2,10 @@
 import {maxNumberOfCard} from "../consts";
 import {Card} from "../card";
 import {IPlayer} from "./iplayer";
-import {PlayerInfo} from "./playerInfo";
+import {User} from "./user";
 
 export class Opponent implements IPlayer {   
-    info: PlayerInfo;
+    info: User;
     cardsWerePut: boolean[];
 
     get id(): string {
@@ -18,7 +18,7 @@ export class Opponent implements IPlayer {
         this.info.money = value;
     }
 
-    constructor(info:PlayerInfo) {
+    constructor(info:User) {
         this.info = info;       
         this.cardsWerePut = range(maxNumberOfCard, false);
     }

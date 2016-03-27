@@ -1,7 +1,7 @@
-﻿import {PlayerInfo} from "./players/playerInfo";
+﻿import {User} from "./players/user";
 
 export class GameResult {
-    public winner : PlayerInfo;
-    public otherUsers: PlayerInfo[];
+    public winner : User;
+    public otherUsers: User[];
     public bankMoney: number;
 }

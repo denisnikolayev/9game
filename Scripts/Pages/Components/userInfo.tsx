@@ -1,7 +1,7 @@
 ﻿import * as React from 'react';
-import {PlayerInfo} from "../../model/players/playerInfo";
+import {User} from "../../model/players/user";
 
-export class UserInfo extends React.Component<{user: PlayerInfo, key?:any}, {}> {
+export class UserInfo extends React.Component<{user: User, key?:any}, {}> {
     render() {
         let {user} = this.props;
 

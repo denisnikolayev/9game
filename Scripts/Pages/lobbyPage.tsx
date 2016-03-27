@@ -1,7 +1,7 @@
 ﻿import * as React from "react";
 import {LobbyContext} from "../model/lobbyContext";
 import {Container} from "../model/container";
-import {PlayerInfo} from "../model/players/playerInfo";
+import {User} from "../model/players/user";
 import {UserInfo} from "./components/userInfo";
 
 interface ILobbyPageProps {
@@ -27,7 +27,7 @@ export class LobbyPage extends React.Component<ILobbyPageProps, { lobbyContext: 
         let {lobbyContext} = this.state;
         return <div>
                     <div className="row">
-                        <b>If you want to save your money, authorize by -> </b>
+                        <b>If you want to save your money, sign in by -> </b>
                         <a href="/login?authscheme=Vk" className="btn btn-blue" >Vk</a>
                         <a href="/login?authscheme=Facebook" className="btn btn-blue" >Facebook</a>
                     </div>
@@ -40,7 +40,7 @@ export class LobbyPage extends React.Component<ILobbyPageProps, { lobbyContext: 
     }    
 
     stateWaitGamers() {
-        var connectedUsers = Container.lobbyContext.connectedPlayers.map(playerInfo=> <UserInfo user={playerInfo} key={playerInfo.id} />);
+        var connectedUsers = Container.lobbyContext.connectedPlayers.map(user=> <UserInfo user={user} key={user.id} />);
         return (
             <div> 
                  <div>Waiting</div>

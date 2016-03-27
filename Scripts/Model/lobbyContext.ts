@@ -1,5 +1,5 @@
 ﻿import 'ms-signalr-client';
-import {PlayerInfo} from "./players/playerInfo";
+import {User} from "./players/user";
 import {Card} from "./card";
 import {GameContext} from "./gameContext";
 import {subscribe} from "../utils/helpers";
@@ -12,8 +12,8 @@ export class LobbyContext {
     onConnected: (gameId:string)=>void;
     
 
-    currentPlayer: PlayerInfo;    
-    connectedPlayers: PlayerInfo[];
+    currentPlayer: User;    
+    connectedPlayers: User[];
 
     private gameId:string;
     private lobbyServer: SignalR.Hub.Proxy
@@ -32,24 +32,24 @@ export class LobbyContext {
     }      
    
 
-    serverRegistered(playerInfo: PlayerInfo) {  
+    serverRegistered(user: User) {  
         this.onRegisteredResolve();
-        this.currentPlayer = playerInfo;
+        this.currentPlayer = user;
         this.onChange();
     }
 
-    serverConnected(gameId: string, players: PlayerInfo[]) {        
+    serverConnected(gameId: string, players: User[]) {        
         this.connectedPlayers = players;
         this.gameId = gameId;
         this.onConnected(gameId);
     } 
 
-    serverPlayerConnected(player: PlayerInfo) {
+    serverPlayerConnected(player: User) {
         this.connectedPlayers.push(player);
         this.onChange();
     }
 
-    serverGameStart(players: PlayerInfo[], bankMoney: number, yourCards: Card[], avaliableCards: Card[]) {       
+    serverGameStart(players: User[], bankMoney: number, yourCards: Card[], avaliableCards: Card[]) {       
         var player = new Player(this.currentPlayer, yourCards, avaliableCards || []);
         this.gameContext.beginGame(this.gameId, players, bankMoney, player);     
         this.onGameStart();

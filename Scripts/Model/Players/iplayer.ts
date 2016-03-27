@@ -1,9 +1,9 @@
 ﻿import {Card} from "../card";
-import {PlayerInfo} from "./playerInfo";
+import {User} from "./user";
 
 export interface IPlayer {
     removeCard(card: Card): void;    
-    info: PlayerInfo;
+    info: User;
     id: string;
     money: number;    
 }

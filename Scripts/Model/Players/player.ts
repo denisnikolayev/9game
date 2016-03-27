@@ -1,9 +1,9 @@
 ﻿import {Card} from "../card";
 import {IPlayer} from "./iplayer";
-import {PlayerInfo} from "./playerInfo";
+import {User} from "./user";
 
 export class Player implements IPlayer {
-    info: PlayerInfo;    
+    info: User;    
     cards: Card[];   
     availibleCards:{[id:string]:boolean};   
 
@@ -18,7 +18,7 @@ export class Player implements IPlayer {
         this.info.money = value;
     }
 
-    constructor(info: PlayerInfo, cards: Card[], availibleCards:Card[]) {      
+    constructor(info: User, cards: Card[], availibleCards:Card[]) {      
         this.cards = cards;       
         this.info = info;
         this.setAvailibleCard(availibleCards);
