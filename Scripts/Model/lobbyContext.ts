@@ -79,6 +79,10 @@ export class LobbyContext {
         this.lobbyServer.invoke("PlayWithComputer");
     }
 
+    addComputer() {
+        this.lobbyServer.invoke("AddComputer", this.gameId);
+    }
+
     checkGameId(gameId:string) {
         if (gameId != this.gameId){            
             this.gameId = gameId;

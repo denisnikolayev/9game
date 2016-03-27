@@ -45,9 +45,10 @@ export class LobbyPage extends React.Component<ILobbyPageProps, { lobbyContext: 
         var connectedUsers = Container.lobbyContext.connectedPlayers.map(user=> <UserInfo user={user} key={user.id} />);
         return (
             <div> 
-                 <div>Waiting</div>
-                 <div>Connected players: </div>
+                 <a href="javascript:void(0)" className="btn btn-blue add-computer" onClick={() => Container.lobbyContext.addComputer() }>Add a computer</a>                    
+                 <div>Waiting</div>                 
                  {connectedUsers}
+                
             </div>
         );            
     }

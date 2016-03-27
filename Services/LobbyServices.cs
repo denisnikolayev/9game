@@ -84,11 +84,18 @@ namespace Game.Services
             game.Connect(_playerResolver(_usersStore.CreateComputer(), null));
         }
 
+        public void AddComputer(Guid gameId)
+        {
+            var game = _gameBuildersCache.Load(gameId);
+            game.AddComputer(_playerResolver(_usersStore.CreateComputer(), null));
+        }
+
         public override Task OnDisconnected(bool stopCalled)
         {
             _usersCache[Context.ConnectionId] = null;
 
             return base.OnDisconnected(stopCalled);
         }
+
     }
 }

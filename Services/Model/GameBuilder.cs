@@ -55,6 +55,17 @@ namespace Game.Services.Model
             }
         }
 
+
+        public void AddComputer(Player players)
+        {
+            lock (_lockObject)
+            {
+                if (!IsFull()) { 
+                    Connect(players);
+                }
+            }
+        }
+
         private void AddPlayer(Player player)
         {            
             player.Lobby.Connected(GameId, Players.Select(k => k.User).ToArray());
@@ -92,5 +103,7 @@ namespace Game.Services.Model
                 Players[g.Key].Cards = g.ToArray().OrderBy(a => a.c.Suit).ThenBy(a => a.c.Index).Select(a => a.c).ToArray();
             }
         }
+
+        
     }
 }
