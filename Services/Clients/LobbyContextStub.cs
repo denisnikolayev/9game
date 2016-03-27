@@ -33,5 +33,10 @@ namespace Game.Services.Clients
         {
             
         }
+
+        public void RefreshMoney(int money)
+        {
+
+        }
     }
 }

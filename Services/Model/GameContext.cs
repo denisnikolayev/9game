@@ -120,6 +120,7 @@ namespace Game.Model
             foreach (var p in Players)
             {
                 p.Game.Finish(gameResult);
+                p.Lobby.RefreshMoney(p.Money);
             }
 
             //TODO: Kill game

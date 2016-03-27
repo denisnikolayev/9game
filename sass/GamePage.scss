@@ -1,0 +1,77 @@
+﻿@import "Consts.scss";
+
+.game-page {  
+
+    .bank {
+        @extend .money;
+    }
+
+    .left-gamer {
+        margin-left: 20px;
+        width: $cardSmallWidth * 4 + 4 * 4+10;
+        float: left;
+
+        .info {
+            text-align:center;   
+        }
+
+        .cards {           
+            
+        }
+    }
+
+    .table {
+        margin-left: auto;
+        margin-right: auto;
+        width: 9 * $cardWidth + 4 * 9 + 20;
+        padding: 5px;
+        -moz-border-image: url(../images/chalk_border.png) 20 20 20 20 repeat repeat;
+        -o-border-image: url(../images/chalk_border.png) 20 20 20 20 repeat repeat;
+        -webkit-border-image: url(../images/chalk_border.png) 20 20 20 20 repeat repeat;
+        border-image: url(../images/chalk_border.png) 20 20 20 20 repeat repeat;
+        border-width: 20px;
+    }
+
+    .right-gamer {
+        margin-right: 20px;
+        width: $cardSmallWidth * 4 + 4 * 4+10;
+        float: right;
+
+        .info {
+            text-align:center;   
+        }
+    }
+
+    .current-gamer {
+        margin-top: 10px;
+        width: $cardWidth * 13;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        line-height: $cardHeight + 20;
+        .card {
+            -moz-transition-property: margin-bottom;
+            -o-transition-property: margin-bottom;
+            -webkit-transition-property: margin-bottom;
+            transition-property: margin-bottom;
+            -moz-transition-duration: 0.5s;
+            -o-transition-duration: 0.5s;
+            -webkit-transition-duration: 0.5s;
+            transition-duration: 0.5s;           
+
+            vertical-align:bottom;
+            margin-bottom: 0;
+        }
+        
+
+        .can {
+            margin-bottom: 15px;
+        }
+    }
+
+    .current-gamer-info {
+        margin-top: 20px;
+        float:left;
+        margin-left:5px;
+    }
+}

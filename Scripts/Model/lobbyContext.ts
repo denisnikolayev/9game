@@ -55,6 +55,10 @@ export class LobbyContext {
         this.onGameStart();
     }
 
+    serverRefreshMoney(money: number) {
+        this.currentPlayer.money = money;
+        this.onChange();
+    }
 
     registerUser(): Promise<void> {
         return new Promise<void>((resolve, reject) => {

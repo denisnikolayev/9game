@@ -56,7 +56,8 @@ export class GameContext {
         this.onChange();
     }
 
-    serverSkipTurn(playerId, lostMoney:number) {
+    serverSkipTurn(playerId, lostMoney: number) {
+        debugger;
         this.players[playerId].money -= lostMoney;
         this.bankMoney += lostMoney;
         this.onChange();

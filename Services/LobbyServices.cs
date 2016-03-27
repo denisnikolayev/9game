@@ -37,6 +37,7 @@ namespace Game.Services
 
             Clients.Caller.Registered(user);
         }
+        
 
         public void ConnectToGame(Guid gameId)
         {

@@ -1,5 +1,6 @@
-﻿$cardWidth : 109px * 0.8;
-$cardHeight : 150px * 0.8;
+﻿@import "Consts";
+@import "GamePage";
+@import "GameResultPage";
 
 body, html {
     background-color:#008080;    
@@ -29,7 +30,6 @@ body, html {
     background:url('../images/back.png') center no-repeat;
 }
 
-$cardSmallWidth : 55px;
 
 .empty_back {
     width:$cardSmallWidth;
@@ -47,114 +47,48 @@ $cardSmallWidth : 55px;
     background:url('../images/back_small.png') center no-repeat;
 }
 
+.coin {
+    padding-right: 20px;
+    background: url('../images/coins.png') right no-repeat;
+    color: gold;
+ }
+
  .money {
         font-size: 15pt;
         color: gold;
         font-weight: bold;
-        text-align: center;
+        text-align: center;        
+ }
 
-        .coin {
-            padding-right: 20px;
-            background: url('../images/coins.png') right no-repeat;
-        }
-    }
-
-.table {  
-
-    .bank {
-        @extend .money;
-    }
-
-    .left_gamer {
-        margin-left: 20px;
-        width: $cardSmallWidth * 4 + 4 * 4+10;
-        float: left;
-
-        h2 {
-            text-align: center;
-        }
-    }
-
-    .main {
-        margin-left: auto;
-        margin-right: auto;
-        width: 9 * $cardWidth + 4 * 9 + 20;
-        padding: 5px;
-        -moz-border-image: url(../images/chalk_border.png) 20 20 20 20 repeat repeat;
-        -o-border-image: url(../images/chalk_border.png) 20 20 20 20 repeat repeat;
-        -webkit-border-image: url(../images/chalk_border.png) 20 20 20 20 repeat repeat;
-        border-image: url(../images/chalk_border.png) 20 20 20 20 repeat repeat;
-        border-width: 20px;
-    }
-
-    .right_gamer {
-        margin-right: 20px;
-        width: $cardSmallWidth * 4 + 4 * 4+10;
-        float: right;
-
-        h2 {
-            text-align: center;
-        }
-    }
-
-    .current_gamer {
-        margin-top: 10px;
-        width: $cardWidth * 13;
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
-        line-height: $cardHeight + 20;
-        .card {
-            -moz-transition-property: margin-bottom;
-            -o-transition-property: margin-bottom;
-            -webkit-transition-property: margin-bottom;
-            transition-property: margin-bottom;
-            -moz-transition-duration: 0.5s;
-            -o-transition-duration: 0.5s;
-            -webkit-transition-duration: 0.5s;
-            transition-duration: 0.5s;           
-
-            vertical-align:bottom;
-            margin-bottom: 0;
-        }
-        
-
-        .can {
-            margin-bottom: 15px;
-        }
-    }
-}
-
-.gameResult {
-    border: 1px solid black;
-    background-color: white;
-    position: fixed;
-    padding:50px;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-}
 
 .lobby {
     border: 1px solid black;
     background-color: white;
-    position: fixed;
-    padding:50px;
+    position: absolute;
     top: 50%;
     left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    margin-top:-150px;
+    margin-left:-500px;
+    width:1000px;
+    height:300px;
+    padding:15px;
 
-    button {
-
+    .userInfo {
+        float:left;
     }
+
+    .mainInfo {
+        white-space:nowrap;
+        text-align:center;
+
+        .row {
+            margin-bottom:20px;
+        }
+    }
+
+    .chat{
+        clear:left;
+    }    
 }
 
 a.btn {
@@ -190,3 +124,18 @@ a.btn.btn-blue {
 		background-color: #3C677B;
 		border-color: rgba(0,0,0,0.9);
 	}
+
+
+.user{
+    display:inline-block;
+    border:1px solid black;
+    padding:5px;
+    margin:2px;
+    background-color:black;
+
+    .computer{
+        width:100px;
+        height:100px;
+        background:url(../Images/Computer.jpg) center no-repeat
+    }
+}

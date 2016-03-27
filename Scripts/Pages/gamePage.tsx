@@ -4,17 +4,20 @@ import {suits, indexes} from "../model/consts";
 import {GameContext} from "../model/gameContext";
 import {Container} from "../model/container";
 import {browserHistory} from 'react-router'
+import {UserInfo} from "./components/userInfo";
 
 export class GamePage extends React.Component<{}, { gameContext: GameContext }> {
     constructor() {
         super();
         this.state = {
             gameContext: Container.gameContext
-        }
-        Container.gameContext.onChange = ()=>this.setState({gameContext:Container.gameContext});
-    }       
-    
-     componentWillUnmount() {
+        }        
+    }    
+       
+    componentDidMount() {
+        Container.gameContext.onChange = () => this.setState({ gameContext: Container.gameContext });
+    }
+    componentWillUnmount() {
          Container.gameContext.onChange = () => { };
     }   
      
@@ -40,26 +43,26 @@ export class GamePage extends React.Component<{}, { gameContext: GameContext }> 
         );
         
         return (
-            <div className="table">
+            <div className="game-page">
                 <h1 className="bank">Bank: <span className="coin">{gameContext.bankMoney}</span></h1>
-                <div className="left_gamer">
-                    <h2>{gameContext.leftOpponent.info.name}</h2>
-                    {gameContext.leftOpponent.cardsWerePut.map((isPut, index) => <div key={index} className={isPut == false ? "small_back" : "empty_back"} />) }
-                    <div className="money"><span className="coin">{gameContext.leftOpponent.money}</span></div>
+                <div className="left-gamer">
+                    <div className="info"><UserInfo user={gameContext.leftOpponent.info} /></div>
+                    <div className="cards">{gameContext.leftOpponent.cardsWerePut.map((isPut, index) => <div key={index} className={isPut == false ? "small_back" : "empty_back"} />) }</div>
                 </div>
                 
-                <div className="right_gamer">
-                    <h2>{gameContext.rightOpponent.info.name}</h2>
-                    {gameContext.rightOpponent.cardsWerePut.map((isPut, index) => <div key={index} className={isPut == false ? "small_back" : "empty_back"} />) }
-                    <div className="money"><span className="coin">{gameContext.rightOpponent.money}</span></div>
+                <div className="right-gamer">
+                    <div className="info"><UserInfo user={gameContext.rightOpponent.info} /></div>
+                    <div className="cards">{gameContext.rightOpponent.cardsWerePut.map((isPut, index) => <div key={index} className={isPut == false ? "small_back" : "empty_back"} />) }</div>
                 </div>    
                 
-                <div className="main">
+                <div className="table">
                     {list}
                 </div>  
                   
-                <div className="money"><span className="coin">{gameContext.player.money}</span></div>
-                <div className="current_gamer">
+                <div className="current-gamer-info">
+                    <UserInfo user={gameContext.player.info} /> 
+                </div>                
+                <div className="current-gamer">
                    
                     {gameContext.player.cards.map(c=> {
                         var canPut = gameContext.player.isCardCanBePut(c);

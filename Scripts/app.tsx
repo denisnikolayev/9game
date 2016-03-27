@@ -8,8 +8,6 @@ import {GameResultPage} from "./pages/gameResultPage";
 import {Container} from "./model/container";
 import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 
-
-
 export class Layout extends React.Component<{children:any}, {}> {      
     render() {
         return <div>{this.props.children}</div>

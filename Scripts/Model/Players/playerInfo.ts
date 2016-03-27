@@ -3,4 +3,5 @@
     id: string;
     avatarUrl: string;
     money: number;
+    isHuman: boolean;
 }

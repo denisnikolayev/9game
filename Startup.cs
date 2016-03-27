@@ -72,52 +72,9 @@ namespace Game
             {
                 options.AutomaticAuthenticate = true;
                 options.AutomaticChallenge = true;
-            });           
-
-            app.UseOAuthAuthentication(new OAuthOptions
-            {
-                AuthenticationScheme = "Vk",
-                DisplayName = "Vk",
-                ClientId = "5378050",
-                ClientSecret = "gG5K1DsC9vcGZZRtHdPJ",
-                CallbackPath = new PathString("/signin-vkontakte"),
-                AuthorizationEndpoint = "https://oauth.vk.com/authorize",
-                TokenEndpoint = "https://oauth.vk.com/access_token",
-                Scope = {"profile" },
-                Events = new OAuthEvents()
-                {
-                    OnCreatingTicket = async (context) =>
-                    {
-                        var userId = context.TokenResponse.Response["user_id"].ToString();
-
-                        string userInfoLink = "https://api.vk.com/method/" + "users.get.json" +
-                                      "?user_ids=" + Uri.EscapeDataString(userId) +
-                                      "&fields=" + Uri.EscapeDataString("photo_medium"); //nickname,screen_name
-
-                        var request = new HttpRequestMessage(HttpMethod.Get, userInfoLink);
-                        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
-                        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                        var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
-                        response.EnsureSuccessStatusCode();
-
-                        var user = JObject.Parse(await response.Content.ReadAsStringAsync()).Property("response").First().First();
-                       
-                        context.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Value<string>("uid")));
-                        
-                        var firstName = user.Value<string>("first_name");
-                        var lastName = user.Value<string>("last_name");
-
-                        context.Identity.AddClaim(new Claim(ClaimTypes.Name, firstName + " " + lastName));
-
-                        context.Identity.AddClaim(new Claim("Photo", user.Value<string>("photo_medium")));
-                    },
-                     OnTicketReceived = (ticket) =>
-                     {
-                         return Task.FromResult(0);
-                     }
-                }
             });
+
+            ConfigureVk(app);
 
             app.UseFacebookAuthentication(options=>
             {                     
@@ -168,5 +125,53 @@ namespace Game
 
         // Entry point for the application.
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+
+
+
+
+        public void ConfigureVk(IApplicationBuilder app)
+        {
+            app.UseOAuthAuthentication(new OAuthOptions
+            {
+                AuthenticationScheme = "Vk",
+                DisplayName = "Vk",
+                ClientId = "5378050",
+                ClientSecret = "gG5K1DsC9vcGZZRtHdPJ",
+                CallbackPath = new PathString("/signin-vkontakte"),
+                AuthorizationEndpoint = "https://oauth.vk.com/authorize",
+                TokenEndpoint = "https://oauth.vk.com/access_token",
+                Scope = { "profile" },
+                Events = new OAuthEvents()
+                {
+                    OnCreatingTicket = async (context) =>
+                    {
+                        var userId = context.TokenResponse.Response["user_id"].ToString();
+
+                        string userInfoLink = "https://api.vk.com/method/" + "users.get.json" +
+                                      "?user_ids=" + Uri.EscapeDataString(userId) +
+                                      "&fields=" + Uri.EscapeDataString("photo_medium"); //nickname,screen_name
+
+                        var request = new HttpRequestMessage(HttpMethod.Get, userInfoLink);
+                        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
+                        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                        var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
+                        response.EnsureSuccessStatusCode();
+
+                        var user = JObject.Parse(await response.Content.ReadAsStringAsync()).Property("response").First().First();
+
+                        context.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Value<string>("uid")));
+
+                        var firstName = user.Value<string>("first_name");
+                        var lastName = user.Value<string>("last_name");
+
+                        context.Identity.AddClaim(new Claim(ClaimTypes.Name, firstName + " " + lastName));
+
+                        context.Identity.AddClaim(new Claim("Photo", user.Value<string>("photo_medium")));
+                    }
+                }
+            });
+
+        }
     }
 }

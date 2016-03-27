@@ -18,5 +18,7 @@ namespace Game.Services.Clients
         void GameStart(User[] info, int bankMoney, Card[] yourCards, Card[] avaliableCards);
 
         void PlayerConnected(User user);
+
+        void RefreshMoney(int money);
     }
 }
