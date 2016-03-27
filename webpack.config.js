@@ -6,10 +6,13 @@ var WebpackNotifierPlugin = require('webpack-notifier');
 
 module.exports = {
     devtool: "inline-source-map",
-    entry: [
+    entry: process.env.NODE_ENV == "development"?[
          "webpack-dev-server/client?http://localhost:3002",
          "webpack/hot/only-dev-server",
          "./sass/app.scss",
+         "./scripts/app.tsx"
+    ] : [
+        "./sass/app.scss",
          "./scripts/app.tsx"
     ],
     output: {
@@ -36,7 +39,7 @@ module.exports = {
     },
     plugins: [        
         new webpack.DefinePlugin({
-            SERVER_URL: process.env.NODE_ENV == "development" ? JSON.stringify("http://localhost:30155") : JSON.stringify("/")
+            SERVER_URL: process.env.NODE_ENV == "development" ? JSON.stringify("http://localhost:30155") : JSON.stringify("")
         }),
         new webpack.ProvidePlugin({
             $: "jquery",

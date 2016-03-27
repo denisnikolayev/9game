@@ -73,6 +73,10 @@ namespace Game
 
             app.UseIISPlatformHandler();
 
+            app.UseDeveloperExceptionPage();
+
+            app.UseRuntimeInfoPage();
+
             app.UseCookieAuthentication(options =>
             {
                 options.AutomaticAuthenticate = true;
@@ -110,6 +114,7 @@ namespace Game
                 });
             });
 
+            app.UseDefaultFiles();
             app.UseStaticFiles();
            
 
@@ -120,11 +125,11 @@ namespace Game
 
             app.UseMvc();
             //html5mode routing
-            app.Run(context =>
-            {                
-                context.Response.Redirect("/");
-                return Task.FromResult<object>(null);
-            });
+            //app.Run(context =>
+            //{                
+            //    context.Response.Redirect("/");
+            //    return Task.FromResult<object>(null);
+            //});
 
         }
 

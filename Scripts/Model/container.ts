@@ -22,7 +22,7 @@ export class Container {
 }
 
 // imitation initializing IoC container
-Container.connection = $.hubConnection(SERVER_URL);
+Container.connection = SERVER_URL != "" ? $.hubConnection(SERVER_URL) : $.hubConnection();
 
 
 Container.gameContext = new GameContext(Container.connection.createHubProxy("Game"));
