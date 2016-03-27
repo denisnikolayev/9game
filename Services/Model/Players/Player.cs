@@ -32,13 +32,16 @@ namespace Game.Model.Players
 
         public IGameContext Game { get; private set; }
         public ILobbyContext Lobby { get; private set; }
-        public bool IsHuman => User.IsHuman;
+        public IChatContext Chat { get; private set; }
 
-        public Player(User user, IGameContext game, ILobbyContext lobby)
+        public bool IsHuman => User.IsHuman;        
+
+        public Player(User user, IGameContext game, ILobbyContext lobby, IChatContext chat)
         {
             this.User = user;
             this.Game = game;
             this.Lobby = lobby;
+            this.Chat = chat;
         }
 
         public void RemoveCard(Card card)

@@ -1,0 +1,24 @@
+﻿.chat-component {
+    margin: 2px;
+    border: 1px solid black;
+    padding: 5px;
+    background-color:white;
+
+    .messages {
+        height: 85%;
+        overflow-y: auto;
+
+        .sender {
+            font-size:small;
+            color:blue;
+        }
+    }
+
+    .message {
+        margin-top: 10px;
+        
+        input {           
+            width:100%;
+        }
+    }
+}

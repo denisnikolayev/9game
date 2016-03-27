@@ -40,7 +40,7 @@ namespace Game.Services
                 user = _usersStore.RegisterAsGuest(Context.ConnectionId);
             }
             _usersCache[Context.ConnectionId] = user;
-            Clients.Caller.Registered(user);
+            Clients.Caller.Registered(user);            
         }
         
 

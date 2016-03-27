@@ -23,19 +23,18 @@ export class Layout extends React.Component<{children:any}, {}> {
     try {
         await Container.ConnectSignalR();
         await Container.lobbyContext.registerUser();
+    } catch (e) {        
+        render(<div>Could not connect to server: <br/>{e.toString()}</div>, appNode);
+    }
 
-        render(
-            <Router history={browserHistory}>
+    render(
+        <Router history={browserHistory}>
                 <Route path="/" component={Layout}>
                     <IndexRoute component={LobbyPage}/>
                     <Route path="lobby" component={LobbyPage}/>
                     <Route path="game" component={GamePage} />
                     <Route path="result" component={GameResultPage}/>
-                </Route>
+                    </Route>
             </Router>
-            , appNode);
-
-    } catch (e) {        
-        render(<div>Could not connect to server: <br/>{e.toString()}</div>, appNode);
-    }
+        , appNode);
 })();

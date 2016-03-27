@@ -5,6 +5,7 @@ import {GameContext} from "../model/gameContext";
 import {Container} from "../model/container";
 import {browserHistory} from 'react-router'
 import {UserInfo} from "./components/userInfo";
+import {Chat} from "./components/chat";
 
 export class GamePage extends React.Component<{}, { gameContext: GameContext }> {
     constructor() {
@@ -37,7 +38,7 @@ export class GamePage extends React.Component<{}, { gameContext: GameContext }> 
             <div key={`${suit} x ${index}`} className="card" style={{ backgroundPosition: cardsBackgroundsCache[suit][index] }} ></div>;
 
         var list = suits.map(suit=>
-            <div key={suit}>
+            <div key={suit} className="row">
                 {indexes.map(index=> gameContext.cardsWereOpened[suit][index] ? card(suit, index) : <div key={`${suit} x ${index}`} className="emptyCard"></div>) }
             </div>
         );
@@ -61,7 +62,10 @@ export class GamePage extends React.Component<{}, { gameContext: GameContext }> 
                   
                 <div className="current-gamer-info">
                     <UserInfo user={gameContext.player.info} /> 
-                </div>                
+                </div>   
+                <div className="chat">
+                    <Chat />
+                </div>             
                 <div className="current-gamer">
                    
                     {gameContext.player.cards.map(c=> {

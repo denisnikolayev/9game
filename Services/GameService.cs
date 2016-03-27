@@ -41,8 +41,6 @@ namespace Game.Services
                     game.PutCardOnTheTable(player, card);
                 }
             }
-        }
-
-       
+        }        
     }
 }

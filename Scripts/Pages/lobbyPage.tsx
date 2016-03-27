@@ -3,6 +3,8 @@ import {LobbyContext} from "../model/lobbyContext";
 import {Container} from "../model/container";
 import {User} from "../model/players/user";
 import {UserInfo} from "./components/userInfo";
+import {Chat} from "./components/chat";
+
 
 interface ILobbyPageProps {
     location:{query:{gameId?:string}}
@@ -63,7 +65,7 @@ export class LobbyPage extends React.Component<ILobbyPageProps, { lobbyContext: 
                     {this.props.location.query && this.props.location.query.gameId ? this.stateWaitGamers() : this.stateChooseGame() }
                 </div>
                 <div className="chat">
-                    //TODO: chat
+                    <Chat />
                 </div>
             </div>);
     }

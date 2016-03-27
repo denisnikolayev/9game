@@ -25,10 +25,12 @@ namespace Game.Services
             builder.RegisterType<GameBuilder>();
             builder.RegisterType<LobbyContextStub>();
             builder.RegisterType<GameContextStub>();
+            builder.RegisterType<ChatContextStub>();
             builder.RegisterType<GameContext>();
             builder.RegisterType<GameResult>();
+            builder.RegisterType<ChatService>();
 
-            builder.Register<IGameContext>((c, p) =>
+            builder.Register((c, p) =>
             {
                 var connectionId = p.TypedAs<string>();
                 if (!string.IsNullOrWhiteSpace(connectionId))
@@ -41,7 +43,7 @@ namespace Game.Services
                 }
             });
 
-            builder.Register<ILobbyContext>((c, p) =>
+            builder.Register((c, p) =>
             {
                 var connectionId = p.TypedAs<string>();
                 if (!string.IsNullOrWhiteSpace(connectionId))
@@ -55,14 +57,32 @@ namespace Game.Services
             });
 
 
+            builder.Register((c, p) =>
+            {
+                var connectionId = p.TypedAs<string>();
+                if (!string.IsNullOrWhiteSpace(connectionId))
+                {
+                    return c.Resolve<IConnectionManager>().GetHubContext<ChatService, IChatContext>().Clients.Client(connectionId);
+                }
+                else
+                {
+                    return c.Resolve<ChatContextStub>();
+                }
+            });
+
+
             builder.Register<Player>((c, p) =>
             {
                 var user = p.TypedAs<User>();
                 var connectionId = p.TypedAs<string>();
                 var gameContextResolver = c.Resolve<Func<string, IGameContext>>();
                 var lobbyContextResolver = c.Resolve<Func<string, ILobbyContext>>();
+                var chatContextResolver = c.Resolve<Func<string, IChatContext>>();
 
-                return new Player(user, gameContextResolver(connectionId), lobbyContextResolver(connectionId));
+                return new Player(user,
+                    gameContextResolver(connectionId),
+                    lobbyContextResolver(connectionId),
+                    chatContextResolver(connectionId));
             });
         }
     }
