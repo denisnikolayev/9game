@@ -215,3 +215,4 @@ ModelManifest.xml
 /wwwroot/bundle.js
 /wwwroot/b2eea1a8029dac08257ff18f1d5d9605.jpg
 *.jpg
+/Server/wwwroot/bundle.js

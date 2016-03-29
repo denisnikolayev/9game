@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "9game", "9game.xproj", "{07A81C97-6F2E-4CD8-BEBC-E2CD35219850}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BBE0EFB9-4754-4607-92C0-867D45AC7D06}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet.config = NuGet.config
@@ -14,6 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{36CCB179-3
 	ProjectSection(SolutionItems) = preProject
 		Docs\StateMachine.png = Docs\StateMachine.png
 	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Server", "Server\Server.xproj", "{07A81C97-6F2E-4CD8-BEBC-E2CD35219850}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Client", "Client\Client.xproj", "{DE0B0666-7636-49CC-81D3-61BD07640721}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,9 @@ Global
 		{07A81C97-6F2E-4CD8-BEBC-E2CD35219850}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07A81C97-6F2E-4CD8-BEBC-E2CD35219850}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07A81C97-6F2E-4CD8-BEBC-E2CD35219850}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE0B0666-7636-49CC-81D3-61BD07640721}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE0B0666-7636-49CC-81D3-61BD07640721}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE0B0666-7636-49CC-81D3-61BD07640721}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

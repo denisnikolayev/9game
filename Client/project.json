@@ -1,0 +1,12 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Client Class Library",
+  "authors": [ "Denis_Nikolayev" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "frameworks": {
+    "net451": { }
+  }
+}
