@@ -1,25 +1,16 @@
 ﻿using System.Collections.Generic;
-using Game.Server.Model.Players;
 using Microsoft.AspNet.Mvc;
-using MongoDB.Driver;
 
 namespace Game.Server.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        private readonly IMongoCollection<User> _users;
-
-        public ValuesController(IMongoCollection<User> users)
-        {
-            _users = users;
-        }
-
         // GET: api/values
         [HttpGet]
-        public IEnumerable<User> Get()
+        public IEnumerable<int> Get()
         {
-            return _users.Find(f=>true).ToList();
+            return new int[] {1, 3, 8, 10};
         }
 
         // GET api/values/5
