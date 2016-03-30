@@ -128,9 +128,6 @@ namespace Game.Server
            
 
             app.UseMvc();
-            //html5mode routing
-            
-
         }
 
         // Entry point for the application.
