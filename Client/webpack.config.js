@@ -4,9 +4,16 @@ var path = require("path");
 var webpack = require("webpack");
 var WebpackNotifierPlugin = require('webpack-notifier');
 
+var proxyServerUrl = process.env.NODE_ENV === "development" ? "http://localhost:30155"
+    : process.env.NODE_ENV === "developmentWithoutServer" ? "http://9game.azurewebsites.net"
+    : "";
+
+console.log(process.env.NODE_ENV);
+console.log("Proxy server url " + proxyServerUrl);
+
 module.exports = {
-    devtool: "", //process.env.NODE_ENV == "development"?"inline-source-map":"",
-    entry: process.env.NODE_ENV == "development"
+    devtool: process.env.NODE_ENV == "development" || process.env.NODE_ENV === "developmentWithoutServer" ? "inline-source-map" : "",
+    entry: process.env.NODE_ENV == "development" || process.env.NODE_ENV === "developmentWithoutServer"
         ? [
             "webpack-dev-server/client?http://localhost:3002",
             "webpack/hot/only-dev-server",
@@ -29,7 +36,7 @@ module.exports = {
         loaders: [
         {
             test: /(\.tsx|\.ts)$/,
-            loaders: process.env.NODE_ENV === "development" ? ["react-hot", "babel-loader?presets[]=es2015&plugins[]=transform-runtime&presets[]=stage-0", "ts-loader"] : ["babel-loader?presets[]=es2015&plugins[]=transform-runtime&presets[]=stage-0", "ts-loader"],
+            loaders: process.env.NODE_ENV === "development" || process.env.NODE_ENV === "developmentWithoutServer" ? ["react-hot", "babel-loader?presets[]=es2015&plugins[]=transform-runtime&presets[]=stage-0", "ts-loader"] : ["babel-loader?presets[]=es2015&plugins[]=transform-runtime&presets[]=stage-0", "ts-loader"],
             include: __dirname
         },
         { test: /\.png|\.jpg$/, loader: "url-loader?limit=100000" },
@@ -42,7 +49,7 @@ module.exports = {
     },
     plugins: [        
         new webpack.DefinePlugin({
-            SERVER_URL: process.env.NODE_ENV === "development" ? JSON.stringify("http://localhost:30155") : JSON.stringify("")
+            SERVER_URL: process.env.NODE_ENV === "development" || process.env.NODE_ENV === "developmentWithoutServer" ? JSON.stringify(proxyServerUrl) : JSON.stringify("")
         }),
         new webpack.ProvidePlugin({
             $: "jquery",
@@ -51,23 +58,22 @@ module.exports = {
         }),
         new WebpackNotifierPlugin()
     ],
-    debug: true,
+    debug: false,
     devServer: {
-        contentBase: "./wwwroot",
+        contentBase: "../server/wwwroot",
+        hot: true,
         host: "localhost",
         port: 3002,
+        inline:true,
         proxy: {
-            '/': {
-                target: 'http://localhost:30155'
-            },
             '/api/*': {
-                target: 'http://localhost:30155'
+                target: proxyServerUrl
             },
             '/signin-*': {
-                target: 'http://localhost:30155'
+                target: proxyServerUrl
             },
             '/login': {
-                target: 'http://localhost:30155'
+                target: proxyServerUrl
             }
         },
         historyApiFallback:true
