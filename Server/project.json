@@ -45,6 +45,6 @@
   ],
   "userSecretsId": "aspnet5-9game-20160224044611",
   "scripts": {
-    "prepublish": "cd ../client&&cmd /c SET NODE_ENV=production&&webpack --optimize-occurence-order"
+    "prepublish": "cd ../client&&cmd /c SET NODE_ENV=production&&webpack -p"
   }
 }
