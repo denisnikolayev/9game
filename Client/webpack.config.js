@@ -36,7 +36,7 @@ module.exports = {
         loaders: [
         {
             test: /(\.tsx|\.ts)$/,
-            loaders: process.env.NODE_ENV === "development" || process.env.NODE_ENV === "developmentWithoutServer" ? ["react-hot", "babel-loader?presets[]=es2015&plugins[]=transform-runtime&presets[]=stage-0", "ts-loader"] : ["babel-loader?presets[]=es2015&plugins[]=transform-runtime&presets[]=stage-0", "ts-loader"],
+            loaders: process.env.NODE_ENV === "development" || process.env.NODE_ENV === "developmentWithoutServer" ? ["react-hot", "babel-loader?presets[]=es2015&presets[]=stage-0", "ts-loader"] : ["babel-loader?presets[]=es2015&presets[]=stage-0", "ts-loader"],
             include: __dirname
         },
         { test: /\.png|\.jpg$/, loader: "url-loader?limit=100000" },
